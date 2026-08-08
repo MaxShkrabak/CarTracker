@@ -1,0 +1,35 @@
+<form (ngSubmit)="onLogin()" #loginForm="ngForm">
+  <div class="login-container">
+    <h1 class="login-title">Car Tracker</h1>
+    <p class="login-subtitle">Sign In to Your Account</p>
+    <p class="login-desc">Monitor and manage your vehicle in real time</p>
+
+    <!-- Login inputs -->
+    <div class="form-container">
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input class="login-input" id="username" name="username" type="text" [(ngModel)]="username" placeholder="Enter your email">
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input class="login-input" id="password" name="password" type="password" [(ngModel)]="password" placeholder="Enter your password">
+      </div>
+    </div>
+
+    <button class="btn-secondary">Forgot password</button>
+
+    <button class="btn-primary" type="submit">Sign In</button>
+
+    <!-- New user sign up -->
+    <div class="sign-up">
+      <p>Don't have an account? <button class="btn btn-secondary">Sign Up</button></p>
+    </div>
+  </div>
+</form>
+<p>my username is {{username}}</p>
+<p>my password is {{password}}</p>
+
+

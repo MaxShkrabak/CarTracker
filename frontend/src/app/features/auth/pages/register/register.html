@@ -1,0 +1,18 @@
+
+
+<form (ngSubmit)="onRegister()">
+    <h1>Car Tracker</h1>
+    <p>Create your account</p>
+
+    <label>Full Name</label>
+    <input type="text" name="fullName" [(ngModel)]="fullName" placeholder="Enter your full name"/>
+
+    <label>Username</label>
+    <input type="text" name="username" [(ngModel)]="username" placeholder="Enter your email"/>
+
+    <label>Password</label>
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Enter your password">
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Confirm your password">
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Creating account...' : 'Register'}}</button>
+</form>
