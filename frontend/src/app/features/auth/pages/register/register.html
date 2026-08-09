@@ -1,18 +1,87 @@
+<form (ngSubmit)="onRegister(registerForm)" #registerForm="ngForm">
+  <div class="auth-container">
+    <h1 class="header-title">Car Tracker</h1>
+    <p class="sub-header">Create your account</p>
 
+    <!-- Input fields-->
+    <div
+      class="form-container"
+      [class.shake-invalid]="shakeInvalid"
+      (animationend)="shakeInvalid = false"
+    >
+      <div class="form-group">
+        <label
+          >Full Name
+          <input
+            type="text"
+            name="fullName"
+            [(ngModel)]="fullName"
+            placeholder="Enter your full name"
+            required
+          />
+        </label>
+      </div>
 
-<form (ngSubmit)="onRegister()">
-    <h1>Car Tracker</h1>
-    <p>Create your account</p>
+      <div class="form-group">
+        <label
+          >Username
+          <input
+            type="email"
+            name="username"
+            [(ngModel)]="username"
+            placeholder="Enter your email"
+            required
+            email
+        /></label>
+      </div>
 
-    <label>Full Name</label>
-    <input type="text" name="fullName" [(ngModel)]="fullName" placeholder="Enter your full name"/>
+      <div class="form-group">
+        <label
+          >Password
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Enter your password"
+            required
+        /></label>
+        <input
+          class="confirm-password"
+          type="password"
+          id="confirm-password"
+          name="confirmpassword"
+          onpaste="return false;"
+          [(ngModel)]="confirmpassword"
+          aria-label="Confirm Password"
+          placeholder="Confirm your password"
+          required
+        />
+      </div>
+    </div>
 
-    <label>Username</label>
-    <input type="text" name="username" [(ngModel)]="username" placeholder="Enter your email"/>
+    <!-- Password rules -->
+    <ul class="password-rules" [class.shake]="shakeRules" (animationend)="shakeRules = false">
+      @for (rule of passwordRules; track rule.label) {
+        @if (!rule.met) {
+          <li>
+            {{ rule.label }}
+          </li>
+        }
+      }
+    </ul>
 
-    <label>Password</label>
-    <input type="password" name="password" [(ngModel)]="password" placeholder="Enter your password">
-    <input type="password" name="password" [(ngModel)]="password" placeholder="Confirm your password">
+    <!-- Error message -->
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
 
-    <button type="submit" [disabled]="loading">{{ loading ? 'Creating account...' : 'Register'}}</button>
+    <button class="btn-primary" type="submit" [disabled]="loading()">
+      {{ loading() ? 'Creating account...' : 'Register' }}
+    </button>
+
+    <!-- Login route -->
+    <div class="sign-in">
+      <p>Already have an account? <a routerLink="/login" class="btn-secondary">Sign in</a></p>
+    </div>
+  </div>
 </form>

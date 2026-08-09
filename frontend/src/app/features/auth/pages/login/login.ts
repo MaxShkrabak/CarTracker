@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -15,7 +15,10 @@ export class Login {
   errorMessage = '';
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   onLogin() {
     this.errorMessage = '';
@@ -28,9 +31,9 @@ export class Login {
       },
       error: (err) => {
         this.loading = false;
-        this.errorMessage = err.status === 0 ? 
-        'Cannot reach the server.' : 'Incorrect username or password.';
+        this.errorMessage =
+          err.status === 0 ? 'Cannot reach the server.' : 'Incorrect username or password.';
       },
-    })
+    });
   }
 }

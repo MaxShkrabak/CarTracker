@@ -1,0 +1,20 @@
+.confirm-password {
+  margin-top: 0.5rem;
+}
+
+.form-group input.ng-invalid.ng-touched,
+.form-group input.field-error {
+  border-color: rgba(245, 97, 97, 0.938);
+}
+
+.form-container.shake-invalid input.ng-invalid.ng-touched,
+.form-container.shake-invalid input.field-error {
+  animation: shake 0.4s ease-in-out;
+}
+
+.password-rules {
+  color: rgba(245, 97, 97, 0.938);
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+}

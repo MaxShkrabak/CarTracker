@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
     // Username already taken
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<String> handleUsernameExists(UsernameAlreadyExistsException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 
     // Account doesn't exist
