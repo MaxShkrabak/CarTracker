@@ -5,17 +5,28 @@ import com.maxshkrabak.cartracker.auth.dto.request.LoginRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.PasswordChangeRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
-import com.maxshkrabak.cartracker.auth.entity.Users;
+import com.maxshkrabak.cartracker.auth.entity.User;
 import com.maxshkrabak.cartracker.auth.exception.InvalidPasswordException;
 import com.maxshkrabak.cartracker.auth.exception.UserAccountDoesNotExist;
 import com.maxshkrabak.cartracker.auth.exception.UsernameAlreadyExistsException;
 import com.maxshkrabak.cartracker.auth.mapper.UserMapper;
 import com.maxshkrabak.cartracker.auth.repository.UserRepository;
+import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +35,11 @@ public class UserService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityContextRepository securityContextRepository;
 
     // listing all users
-    public List<Users> getUsers() {
+    public List<User> getUsers() {
         return userRepo.findAll();
     }
 
@@ -36,41 +49,31 @@ public class UserService {
            throw new UsernameAlreadyExistsException(registerRequest.username());
        }
 
-       Users user = userMapper.toEntity(registerRequest);
+       User user = userMapper.toEntity(registerRequest);
 
-       user.setActivated(false);
+       user.setUsername(registerRequest.username().toLowerCase(Locale.ROOT));
        user.setPassword(passwordEncoder.encode(registerRequest.password()));
-       
-       
+       user.setActivated(true); // TODO: Logic for this later
+
        return userMapper.toDto(userRepo.save(user));
     }
 
     // deleting a user
     public void deleteUser(Long id) {
-        Users user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
+        User user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
 
         userRepo.delete(user);
     }
 
-    public Users updateUser(Long id, UserUpdateRequest updateRequest) {
-        Users user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
-
-        // only update changed values
-        if (updateRequest.username() != null) {
-            user.setUsername(updateRequest.username());
-        }
-        if (updateRequest.firstName() != null) {
-            user.setFirstName(updateRequest.firstName());
-        }
-        if (updateRequest.lastName() != null) {
-            user.setLastName(updateRequest.lastName());
-        }
-
-        return userRepo.save(user);
+    @Transactional
+    public UserDTO updateUser(Long uid, UserUpdateRequest request) {
+        User user = userRepo.findById(uid).orElseThrow(() -> new UserAccountDoesNotExist(uid));
+        userMapper.updateUserFromRequest(request, user);
+        return userMapper.toDto(user);
     }
 
-    public Users changePassword(Long id, PasswordChangeRequest changeRequest) {
-        Users user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
+    public User changePassword(Long id, PasswordChangeRequest changeRequest) {
+        User user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
 
         if (!passwordEncoder.matches(changeRequest.password(), user.getPassword())) {
             throw new InvalidPasswordException("Current password is wrong.");
@@ -80,14 +83,22 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public UserDTO login(LoginRequest loginRequest) {
-        Users user = userRepo.findByUsername(loginRequest.username()).orElseThrow(() -> new UserAccountDoesNotExist(null));
+    public UserDTO login(LoginRequest loginRequest, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
 
-        if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            throw new InvalidPasswordException("Incorrect username or password");
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.username().trim().toLowerCase(Locale.ROOT),
+                        loginRequest.password()
+                )
+        );
 
-        return userMapper.toDto(user);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        securityContextRepository.saveContext(context, httpRequest, httpResponse);
+
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        return userMapper.toDto(userRepo.findById(principal.getUid()).orElseThrow());
     }
 
 }

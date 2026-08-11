@@ -5,10 +5,15 @@ import com.maxshkrabak.cartracker.auth.dto.request.LoginRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.PasswordChangeRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
-import com.maxshkrabak.cartracker.auth.entity.Users;
+import com.maxshkrabak.cartracker.auth.entity.User;
+import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.auth.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +27,8 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<Users>> getUsers() {
-        List<Users> users = userService.getUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -33,10 +38,9 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
-        userService.updateUser(id, request);
-        return ResponseEntity.noContent().build();
+    @PatchMapping()
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateRequest request, @AuthenticationPrincipal CustomUserDetails principal) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(principal.getUid(), request));
     }
 
     @PatchMapping("/password/{id}")
@@ -46,8 +50,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(userService.login(loginRequest));
+    public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+        return ResponseEntity.ok(userService.login(loginRequest, request, response));
     }
 
     @PostMapping("/register")
