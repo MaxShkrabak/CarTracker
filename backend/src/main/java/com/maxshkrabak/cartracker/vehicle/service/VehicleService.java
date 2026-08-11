@@ -59,4 +59,5 @@ public class VehicleService {
         vehicleMapper.updateVehicleFromRequest(request, vehicle);
         return vehicleMapper.toDto(vehicle);
     }
+
 }

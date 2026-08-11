@@ -1,3 +1,6 @@
 spring:
   application:
     name: cartracker
+
+vpic:
+  base-url: https://vpic.nhtsa.dot.gov/api/vehicles

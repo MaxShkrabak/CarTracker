@@ -4,6 +4,9 @@ import com.maxshkrabak.cartracker.auth.exception.InvalidPasswordException;
 import com.maxshkrabak.cartracker.auth.exception.UserAccountDoesNotExist;
 import com.maxshkrabak.cartracker.auth.exception.UsernameAlreadyExistsException;
 import com.maxshkrabak.cartracker.vehicle.exception.VehicleNotFoundException;
+import com.maxshkrabak.cartracker.vehicle.exception.VinDecodeException;
+import com.maxshkrabak.cartracker.vehicle.exception.VpicUnavailableException;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,5 +38,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(VehicleNotFoundException.class)
     public ResponseEntity<String> handleVehicleDoesNotExist(VehicleNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    /* ----- Vin Decoding Exceptions ----- */
+    @ExceptionHandler(VinDecodeException.class)
+    public ResponseEntity<String> handleVinDecodeException(VinDecodeException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(VpicUnavailableException.class)
+    public ResponseEntity<String> handleVpicUnavailableException(VpicUnavailableException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.GATEWAY_TIMEOUT);
     }
 }

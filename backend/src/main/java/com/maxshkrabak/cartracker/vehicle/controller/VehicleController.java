@@ -4,12 +4,15 @@ import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleUpdateRequest;
+import com.maxshkrabak.cartracker.vehicle.dto.VinDecodeResponse;
 import com.maxshkrabak.cartracker.vehicle.service.VehicleService;
+import com.maxshkrabak.cartracker.vehicle.service.VinDecodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -19,6 +22,7 @@ import java.util.List;
 public class VehicleController {
 
     private final VehicleService service;
+    private final VinDecodeService vinService;
 
     @GetMapping()
     public List<VehicleDTO> getVehicles(@AuthenticationPrincipal CustomUserDetails principal) {
@@ -48,5 +52,10 @@ public class VehicleController {
     public ResponseEntity<VehicleDTO> updateVehicle(@PathVariable Long vid, @RequestBody VehicleUpdateRequest request,
             @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicle(vid, principal.getUid(), request));
+    }
+
+    @GetMapping("/decode/{vin}")
+    public ResponseEntity<VinDecodeResponse> test(@PathVariable String vin) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(vinService.decodeVin(vin));
     }
 }
