@@ -12,6 +12,10 @@ import tools.jackson.databind.JsonNode;
 public class VinDecodeService {
     private final VpicClient vpicClient;
 
+    private int asIntOrZero(JsonNode node, String field) {
+        return node.path(field).asInt(0);
+    }
+
     public VinDecodeResponse decodeVin(String vin) {
         JsonNode result = vpicClient.decode(vin);
 
@@ -22,11 +26,11 @@ public class VinDecodeService {
         return new VinDecodeResponse(
                 result.path("Make").asString(),
                 result.path("BodyClass").asString(),
-                result.path("Doors").asInt(),
-                result.path("EngineCylinders").asInt(),
-                result.path("EngineHP").asInt(),
+                asIntOrZero(result, "Doors"),
+                asIntOrZero(result, "EngineCylinders"),
+                asIntOrZero(result, "EngineHP"),
                 result.path("Model").asString(),
-                result.path("ModelYear").asInt(),
+                asIntOrZero(result, "ModelYear"),
                 result.path("TransmissionStyle").asString(),
                 result.path("Trim").asString(),
                 result.path("VIN").asString()
