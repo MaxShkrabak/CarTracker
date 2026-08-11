@@ -4,7 +4,6 @@ import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleUpdateRequest;
-import com.maxshkrabak.cartracker.vehicle.entity.Vehicle;
 import com.maxshkrabak.cartracker.vehicle.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,23 +26,27 @@ public class VehicleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<VehicleDTO> addVehicle(@RequestBody VehicleRequest vehicleRequest, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<VehicleDTO> addVehicle(@RequestBody VehicleRequest vehicleRequest,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.addVehicle(vehicleRequest, principal.getUid()));
     }
 
     @GetMapping("/{vid}")
-    public ResponseEntity<VehicleDTO> getVehicle(@PathVariable Long vid, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<VehicleDTO> getVehicle(@PathVariable Long vid,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getVehicle(vid, principal.getUid()));
     }
 
     @DeleteMapping("/{vid}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long vid, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Long vid,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         service.deleteVehicle(vid, principal.getUid());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{vid}")
-    public ResponseEntity<VehicleDTO> updateVehicle(@PathVariable Long vid, @RequestBody VehicleUpdateRequest request, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<VehicleDTO> updateVehicle(@PathVariable Long vid, @RequestBody VehicleUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicle(vid, principal.getUid(), request));
     }
 }

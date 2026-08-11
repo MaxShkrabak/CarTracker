@@ -1,7 +1,6 @@
 package com.maxshkrabak.cartracker.auth.dto.request;
 
-public record LoginRequest (
+public record LoginRequest(
         String username,
-        String password
-){
+        String password) {
 }

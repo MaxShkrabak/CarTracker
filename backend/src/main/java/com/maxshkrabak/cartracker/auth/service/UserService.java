@@ -2,8 +2,8 @@ package com.maxshkrabak.cartracker.auth.service;
 
 import com.maxshkrabak.cartracker.auth.dto.UserDTO;
 import com.maxshkrabak.cartracker.auth.dto.request.LoginRequest;
-import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.PasswordChangeRequest;
+import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
 import com.maxshkrabak.cartracker.auth.entity.User;
 import com.maxshkrabak.cartracker.auth.exception.InvalidPasswordException;
@@ -45,17 +45,17 @@ public class UserService {
 
     // creating a new user
     public UserDTO createUser(RegisterRequest registerRequest) {
-       if (userRepo.existsByUsername(registerRequest.username())) {
-           throw new UsernameAlreadyExistsException(registerRequest.username());
-       }
+        if (userRepo.existsByUsername(registerRequest.username())) {
+            throw new UsernameAlreadyExistsException(registerRequest.username());
+        }
 
-       User user = userMapper.toEntity(registerRequest);
+        User user = userMapper.toEntity(registerRequest);
 
-       user.setUsername(registerRequest.username().toLowerCase(Locale.ROOT));
-       user.setPassword(passwordEncoder.encode(registerRequest.password()));
-       user.setActivated(true); // TODO: Logic for this later
+        user.setUsername(registerRequest.username().toLowerCase(Locale.ROOT));
+        user.setPassword(passwordEncoder.encode(registerRequest.password()));
+        user.setActivated(true); // TODO: Logic for this later
 
-       return userMapper.toDto(userRepo.save(user));
+        return userMapper.toDto(userRepo.save(user));
     }
 
     // deleting a user

@@ -5,7 +5,6 @@ import com.maxshkrabak.cartracker.vehicle.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleUpdateRequest;
 import com.maxshkrabak.cartracker.vehicle.entity.Vehicle;
 import org.mapstruct.*;
-import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public interface VehicleMapper {

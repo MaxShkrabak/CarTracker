@@ -25,6 +25,6 @@ public class Vehicle {
     private int mileage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "uid")
+    @JoinColumn(name = "uid")
     private User user;
 }

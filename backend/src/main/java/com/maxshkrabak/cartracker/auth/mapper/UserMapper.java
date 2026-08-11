@@ -1,12 +1,10 @@
 package com.maxshkrabak.cartracker.auth.mapper;
 
-import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
-import org.mapstruct.*;
-
 import com.maxshkrabak.cartracker.auth.dto.UserDTO;
 import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
+import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
 import com.maxshkrabak.cartracker.auth.entity.User;
-
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

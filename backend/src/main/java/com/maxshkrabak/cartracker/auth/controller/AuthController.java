@@ -39,7 +39,8 @@ public class AuthController {
     }
 
     @PatchMapping()
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateRequest request, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserUpdateRequest request,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(principal.getUid(), request));
     }
 
@@ -50,7 +51,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request,
+            HttpServletResponse response) {
         return ResponseEntity.ok(userService.login(loginRequest, request, response));
     }
 
