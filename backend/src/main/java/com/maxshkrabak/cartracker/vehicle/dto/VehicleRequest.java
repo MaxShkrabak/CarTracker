@@ -2,9 +2,17 @@ package com.maxshkrabak.cartracker.vehicle.dto;
 
 public record VehicleRequest(
                 String vin,
-                String licensePlate,
                 String make,
-                int year,
+                String model,
+                int modelYear,
+                String bodyClass,
+                String trim,
                 String color,
-                int mileage) {
+                String transmissionStyle,
+                int engineCylinders,
+                int engineHP,
+                int doors,
+                int mileage,
+                String licensePlate
+            ) {
 }

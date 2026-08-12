@@ -3,6 +3,7 @@ package com.maxshkrabak.cartracker.vehicle.mapping;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.vehicle.dto.VehicleUpdateRequest;
+import com.maxshkrabak.cartracker.vehicle.dto.VinDecodeResponse;
 import com.maxshkrabak.cartracker.vehicle.entity.Vehicle;
 import org.mapstruct.*;
 
@@ -16,4 +17,9 @@ public interface VehicleMapper {
     @Mapping(target = "vid", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateVehicleFromRequest(VehicleUpdateRequest request, @MappingTarget Vehicle vehicle);
+
+    Vehicle fromDecode(VinDecodeResponse decodedVehicle);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateFromDecode(VinDecodeResponse decodedVehicle, @MappingTarget Vehicle vehicle);
 }

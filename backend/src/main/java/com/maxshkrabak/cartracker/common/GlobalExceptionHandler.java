@@ -6,7 +6,6 @@ import com.maxshkrabak.cartracker.auth.exception.UsernameAlreadyExistsException;
 import com.maxshkrabak.cartracker.vehicle.exception.VehicleNotFoundException;
 import com.maxshkrabak.cartracker.vehicle.exception.VinDecodeException;
 import com.maxshkrabak.cartracker.vehicle.exception.VpicUnavailableException;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

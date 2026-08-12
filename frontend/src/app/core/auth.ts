@@ -15,7 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, credentials)
+    return this.http.post<User>(`${this.apiUrl}/login`, credentials, { withCredentials: true })
       .pipe(tap(user => this.currentUser.set(user)));
   }
 

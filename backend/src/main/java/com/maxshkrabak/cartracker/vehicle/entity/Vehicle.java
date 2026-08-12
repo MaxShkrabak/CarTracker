@@ -18,11 +18,18 @@ public class Vehicle {
     private Long vid;
 
     private String vin;
-    private String licensePlate;
     private String make;
-    private int year;
+    private String model;
+    private int modelYear;
+    private String bodyClass;
+    private String trim;
     private String color;
+    private String transmissionStyle;
+    private int engineCylinders;
+    private int engineHP;
+    private int doors;
     private int mileage;
+    private String licensePlate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")

@@ -6,5 +6,6 @@ public record VehicleUpdateRequest(
           String make,
           Integer year,
           String color,
-          Integer mileage) {
+          Integer mileage
+        ) {
 }

@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -55,7 +54,12 @@ public class VehicleController {
     }
 
     @GetMapping("/decode/{vin}")
-    public ResponseEntity<VinDecodeResponse> test(@PathVariable String vin) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(vinService.decodeVin(vin));
+    public ResponseEntity<VinDecodeResponse> decodeAndFindByVin(@PathVariable String vin) {
+        return ResponseEntity.status(HttpStatus.OK).body(vinService.decodeVin(vin));
+    }
+
+    @PatchMapping("/decode/{vin}")
+    public ResponseEntity<VehicleDTO> decodeAndUpdateVehicle(@PathVariable String vin, @AuthenticationPrincipal CustomUserDetails principal) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicleFromDecode(vin, principal.getUid()));
     }
 }

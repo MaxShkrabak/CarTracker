@@ -1,0 +1,24 @@
+<p>vehicle-card works!</p>
+
+<div class="vehicle-card">
+    @if (loading()) {
+        <p>Loading...</p>
+    } @else if (errorMessage()) {
+        <p> {{ errorMessage() }}</p>
+    } @else if (vehicle(); as v) {
+        <!-- add an image section later for car picture -->
+        <p>Vehicle Details: {{ v.vin }}</p>
+        <p>{{ v.make | titlecase }} {{ v.model }} {{ v.modelYear }}</p>
+        
+        <p><iconify-icon icon="mdi:car" width="24" style="color: #a12b2b"></iconify-icon>Body Class: {{ v.bodyClass }}</p>
+        <p><iconify-icon icon="mdi:car-door" width="24" style="color: #a12b2b"></iconify-icon>Doors: {{ v.doors }}</p>
+        <p><iconify-icon icon="mdi:tag" width="24" style="color: #a12b2b"></iconify-icon>Trim: {{ v.trim }}</p>
+        <p><iconify-icon icon="mdi:piston" width="24" style="color: #a12b2b"></iconify-icon>Engine Cylinders: {{ v.engineCylinders }}</p>
+        <p><iconify-icon icon="mdi:engine" width="24" style="color: #a12b2b"></iconify-icon>Engine Horse Power: {{ v.engineHP }}</p>
+        <p><iconify-icon icon="mdi:car-shift-pattern" width="24" style="color: #a12b2b"></iconify-icon>Transmission: {{ v.transmissionStyle }}</p>
+    } @else {
+        <p>You don't own a vehicle, please add one.</p>
+    }
+    
+    
+</div>

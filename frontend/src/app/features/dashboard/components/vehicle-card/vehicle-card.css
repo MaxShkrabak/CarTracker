@@ -1,0 +1,9 @@
+.vehicle-card {
+    border: 3px solid red;
+    padding: 2rem;
+    background-color: white;
+}
+
+.car-icon {
+    border: 2px solid black;
+}
