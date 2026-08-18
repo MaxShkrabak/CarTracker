@@ -50,18 +50,6 @@ public class UserService {
     private final SecurityContextRepository securityContextRepository;
 
     private final EmailService emailService;
-    private final PasswordTokenRepository tokenRepository;
-
-    private static final SecureRandom RANDOM = new SecureRandom();
-
-    private String sha256(String input) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256").digest(input.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("SHA-256 unavailable", e);
-        }
-    }
 
     // listing all users
     public List<User> getUsers() {
@@ -113,24 +101,6 @@ public class UserService {
 
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         return userMapper.toDto(userRepo.findById(principal.getUid()).orElseThrow());
-    }
-
-    @Transactional
-    public void requestPasswordReset(String mail) {
-       User user = userRepo.findByUsername(mail).orElseThrow(() -> new UsernameNotFoundException("Email does not exist."));
-       // need to invalidate all tokens if any
-        // create and set new token for user
-        byte[] bytes = new byte[32];
-        RANDOM.nextBytes(bytes);
-        String rawToken = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-
-        PasswordResetToken token = new PasswordResetToken();
-        token.setUser(user);
-        token.setCreatedAt(Instant.now());
-        token.setExpiresAt(token.getCreatedAt().plusSeconds(300)); // 5 minute expiration
-        token.setTokenHash(sha256(rawToken));
-        // send user new email with token
-
     }
 
     // TODO: needs updating
