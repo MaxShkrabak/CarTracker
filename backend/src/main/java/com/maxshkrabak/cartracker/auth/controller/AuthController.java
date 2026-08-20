@@ -51,10 +51,16 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("Password reset token has been sent.");
     }
 
-    @PatchMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+    @PostMapping("/verify-reset-token")
+    public ResponseEntity<String> verifyResetToken(@RequestBody VerifyResetTokenRequest request) {
+        passwordResetService.verifyToken(request.email(), request.token());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
         passwordResetService.resetPassword(request);
-        return ResponseEntity.status(HttpStatus.OK).body("Password has been reset.");
+        return ResponseEntity.ok().build();
     }
 
 //    @PatchMapping("/password/{id}")

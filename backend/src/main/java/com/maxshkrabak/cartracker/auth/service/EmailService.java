@@ -14,10 +14,19 @@ public class EmailService {
     public void sendPasswordReset(String to, String token) {
         SimpleMailMessage msg = new SimpleMailMessage();
 
+        String body = """
+                Your password reset token is:
+
+                %s
+
+                Enter this code to reset your password. It expires in 10 minutes.
+                """.formatted(token);
+
         msg.setFrom("noreply@cartracker.local");
         msg.setTo(to);
         msg.setSubject("CarTracker: Reset your password");
-        msg.setText("Reset link: http://localhost:4200/reset-password?token=" + token);
+        msg.setText(body);
+
         mailSender.send(msg);
     }
 }

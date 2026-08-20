@@ -61,7 +61,7 @@
 
     <!-- Password rules -->
     <ul class="password-rules" [class.shake]="shakeRules" (animationend)="shakeRules = false">
-      @for (rule of passwordRules; track rule.label) {
+      @for (rule of rules; track rule.label) {
         @if (!rule.met) {
           <li>
             {{ rule.label }}

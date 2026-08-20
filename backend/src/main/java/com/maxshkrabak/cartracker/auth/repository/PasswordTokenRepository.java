@@ -18,5 +18,5 @@ public interface PasswordTokenRepository extends JpaRepository<PasswordResetToke
            "WHERE t.user = :user AND t.usedAt IS NULL AND t.expiresAt > :now")
     void markAllUsedForUser(@Param("user") User user, @Param("now") Instant now);
 
-    Optional<PasswordResetToken> findByTokenHash(String token);
+    Optional<PasswordResetToken> findByUserAndTokenHash(User user, String tokenHash);
 }

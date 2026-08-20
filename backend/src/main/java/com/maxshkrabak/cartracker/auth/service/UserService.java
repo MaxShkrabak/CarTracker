@@ -5,13 +5,11 @@ import com.maxshkrabak.cartracker.auth.dto.request.LoginRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.PasswordChangeRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.RegisterRequest;
 import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
-import com.maxshkrabak.cartracker.auth.entity.PasswordResetToken;
 import com.maxshkrabak.cartracker.auth.entity.User;
 import com.maxshkrabak.cartracker.auth.exception.InvalidPasswordException;
 import com.maxshkrabak.cartracker.auth.exception.UserAccountDoesNotExist;
 import com.maxshkrabak.cartracker.auth.exception.UsernameAlreadyExistsException;
 import com.maxshkrabak.cartracker.auth.mapper.UserMapper;
-import com.maxshkrabak.cartracker.auth.repository.PasswordTokenRepository;
 import com.maxshkrabak.cartracker.auth.repository.UserRepository;
 import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,19 +21,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.sql.Time;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
 

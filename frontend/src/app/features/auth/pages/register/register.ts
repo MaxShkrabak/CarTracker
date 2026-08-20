@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
+import { passwordRules, PasswordRule } from '../../password-rules';
 
 @Component({
   selector: 'app-register',
@@ -10,6 +11,9 @@ import { AuthService } from '../../../../core/auth';
   styleUrl: './register.css',
 })
 export class Register {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   fullName = '';
   username = '';
   password = '';
@@ -21,27 +25,15 @@ export class Register {
   shakeInvalid = false;
   passwordMismatch = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-
-  // Valid password requirements
-  get passwordRules() {
-    const p = this.password;
-
-    return [
-      { label: 'At least 8 characters', met: p.length >= 8 },
-      { label: 'An uppercase letter', met: /[A-Z]/.test(p) },
-      { label: 'A lowercase letter', met: /[a-z]/.test(p) },
-      { label: 'A number', met: /\d/.test(p) },
-      { label: 'A special character', met: /[^A-Za-z0-9]/.test(p) },
-    ];
+  get rules(): PasswordRule[] {
+    return passwordRules(this.password);
   }
 
   onRegister(form: NgForm) {
     this.errorMessage.set('');
     this.passwordMismatch = false;
+    this.shakeRules = false;
+    this.shakeInvalid = false;
 
     if (form.invalid) {
       form.form.markAllAsTouched();
@@ -51,7 +43,7 @@ export class Register {
     }
 
     // verify password rules
-    if (this.passwordRules.some((r) => !r.met)) {
+    if (this.rules.some((r) => !r.met)) {
       this.shakeRules = true;
       return;
     }
