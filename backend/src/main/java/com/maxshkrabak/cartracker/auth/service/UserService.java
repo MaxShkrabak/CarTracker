@@ -38,8 +38,6 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
-    private final EmailService emailService;
-
     // listing all users
     public List<User> getUsers() {
         return userRepo.findAll();

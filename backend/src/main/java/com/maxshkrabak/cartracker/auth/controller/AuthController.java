@@ -4,7 +4,6 @@ import com.maxshkrabak.cartracker.auth.dto.UserDTO;
 import com.maxshkrabak.cartracker.auth.dto.request.*;
 import com.maxshkrabak.cartracker.auth.entity.User;
 import com.maxshkrabak.cartracker.auth.security.CustomUserDetails;
-import com.maxshkrabak.cartracker.auth.service.EmailService;
 import com.maxshkrabak.cartracker.auth.service.PasswordResetService;
 import com.maxshkrabak.cartracker.auth.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,6 @@ import java.util.List;
 public class AuthController {
 
     private final UserService userService;
-    private final EmailService emailService;
     private final PasswordResetService passwordResetService;
 
     @GetMapping
@@ -62,12 +60,6 @@ public class AuthController {
         passwordResetService.resetPassword(request);
         return ResponseEntity.ok().build();
     }
-
-//    @PatchMapping("/password/{id}")
-//    public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestBody PasswordChangeRequest request) {
-//        userService.changePassword(id, request);
-//        return ResponseEntity.ok().body("Password changed.");
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request,

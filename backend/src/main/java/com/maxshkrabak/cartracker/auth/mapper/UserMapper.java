@@ -6,7 +6,7 @@ import com.maxshkrabak.cartracker.auth.dto.request.UserUpdateRequest;
 import com.maxshkrabak.cartracker.auth.entity.User;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
     UserDTO toDto(User user);
 

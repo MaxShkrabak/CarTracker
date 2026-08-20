@@ -7,8 +7,9 @@ import com.maxshkrabak.cartracker.vehicle.dto.VinDecodeResponse;
 import com.maxshkrabak.cartracker.vehicle.entity.Vehicle;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface VehicleMapper {
+    
     VehicleDTO toDto(Vehicle vehicle);
 
     @Mapping(target = "vid", ignore = true)
