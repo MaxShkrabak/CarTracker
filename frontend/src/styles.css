@@ -1,62 +1,136 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles */
+:root {
+  --color-bg: #322D27;
+  --color-surface: #7F7265;
+  --color-text: #E2E1EB;
+  --color-accent: #BF8440;
+  --color-accent-hover: #D9A063;
+  --color-danger: #D96666;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --field-width: 20rem;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Inter, sans-serif;
-  background-color: #283754;
   margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+input, button, textarea, select {
+  font: inherit;
 }
 
 .header-title {
-  font-size: 36px;
   margin: 0;
+  font-size: 28px;
 }
+
 .sub-header {
-  font-size: 14px;
   margin-bottom: 2rem;
 }
 
 .auth-container {
-  min-height: 80dvh;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 14px;
+  align-items: center;
+  min-height: 80dvh;
 }
 
 .form-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-width: var(--field-width);
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
 .form-group label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  font-size: 14px;
 }
+
 .form-group input {
-  padding: 4px;
-  border: 1px solid rgb(5, 5, 5);
-  border-radius: 4px;
+  width: 100%;
+  padding: 10px;
+  color: var(--color-text);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
   outline: none;
 }
-.btn-primary {
-  border-radius: 16px;
-  border: none;
+
+.form-group input:focus {
+  border: 1px solid var(--color-accent-hover);
+  box-shadow: 0 0 4px 1px #d9a06381;
 }
+
+.form-group input::placeholder {
+  color: var(--color-text);
+  opacity: 65%;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-accent);
+  cursor: pointer;
+  transition: transform 200ms ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+}
+.btn-primary:active {
+  background-color: var(--color-accent-hover);
+  transform: scale(0.98);
+}
+
 .btn-secondary {
+  padding: 0;
+  color: var(--color-accent);
+  text-decoration: none;
   border: none;
   background: none;
-  color: #5be7bc;
-  text-decoration: none;
 }
+
 .btn-secondary:hover {
-  color: #5be7bd86;
+  color: var(--color-accent-hover);
 }
 
 .error {
-  color: rgba(245, 97, 97, 0.938);
+  color: var(--color-danger);
+}
+
+.form-group input.ng-invalid.ng-touched {
+  border-color: var(--color-danger);
+}
+
+.form-group input.ng-invalid.ng-touched:focus {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 4px 1px #eb36367e;
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
@@ -71,5 +145,11 @@ body {
   40%,
   80% {
     transform: translateX(6px);
+  }
+}
+
+@media (pointer: coarse) {
+  body {
+    font-size: 16px;
   }
 }

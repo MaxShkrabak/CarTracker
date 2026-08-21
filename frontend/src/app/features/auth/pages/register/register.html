@@ -45,6 +45,14 @@
             placeholder="Enter your password"
             required
         /></label>
+        <!-- Password rules -->
+        @if (unmetRules.length) {
+          <ul class="password-rules" [class.shake]="shakeRules" (animationend)="shakeRules = false">
+            @for (rule of unmetRules; track rule.label) {
+              <li>{{ rule.label }}</li>
+            }
+          </ul>
+        }
         <input
           class="confirm-password"
           type="password"
@@ -57,27 +65,16 @@
           required
         />
       </div>
-    </div>
 
-    <!-- Password rules -->
-    <ul class="password-rules" [class.shake]="shakeRules" (animationend)="shakeRules = false">
-      @for (rule of rules; track rule.label) {
-        @if (!rule.met) {
-          <li>
-            {{ rule.label }}
-          </li>
-        }
-      }
-    </ul>
+      <button class="btn-primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Creating account...' : 'Register' }}
+      </button>
+    </div>
 
     <!-- Error message -->
     @if (errorMessage()) {
       <p class="error">{{ errorMessage() }}</p>
     }
-
-    <button class="btn-primary" type="submit" [disabled]="loading()">
-      {{ loading() ? 'Creating account...' : 'Register' }}
-    </button>
 
     <!-- Login route -->
     <div class="sign-in">

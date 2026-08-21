@@ -1,7 +1,7 @@
 <form (ngSubmit)="onLogin()" #loginForm="ngForm">
   <div class="auth-container">
-    <h1 class="header-title">Car Tracker</h1>
-    <p class="sub-header">Sign In to Your Account</p>
+    <h1 class="header-title">Welcome Back</h1>
+    <p class="sub-header">Log in to continue to your dashboard.</p>
 
     <!-- Login inputs -->
     <div class="form-container">
@@ -22,31 +22,34 @@
       <div class="form-group">
         <label
           >Password
-          <input
-            class="login-input"
-            name="password"
-            type="password"
-            [(ngModel)]="password"
-            placeholder="Enter your password"
-        /></label>
+          <div class="input-wrapper">
+            <input
+              class="login-input"
+              name="password"
+              [type]="hidePassword() ? 'password' : 'text'"
+              [(ngModel)]="password"
+              placeholder="Enter your password"
+            />
+            <button type="button" class="toggle-eye" (click)="togglePasswordVisibility()">
+              <lucide-icon [img]="hidePassword() ? EyeOff : Eye"/>
+            </button>
+          </div>
+        </label>
         <a
           class="btn-secondary forgot-password"
           [routerLink]="['/forgot-password']"
           routerLinkActive="router-link-active"
-          >Forgot password</a
+          >Forgot password?</a
         >
       </div>
+      <button class="btn-primary" type="submit">Sign In</button>
     </div>
-
-    <button class="btn-primary" type="submit">Sign In</button>
 
     <!-- New user sign up -->
     <div class="sign-up">
       <p>
-        Don't have an account? <a routerLink="/register" class="btn-secondary">Create Account</a>
+        Don't have an account? <a routerLink="/register" class="btn-secondary">Sign up</a>
       </p>
     </div>
   </div>
-
-  <app-obd/>
 </form>

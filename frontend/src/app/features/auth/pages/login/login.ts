@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
 import { Obd } from '../../../dashboard/components/obd/obd';
+import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, Obd],
+  imports: [FormsModule, RouterLink, Obd, LucideAngularModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -15,6 +16,10 @@ export class Login {
   password = '';
   errorMessage = signal('');
   loading = signal(false);
+  hidePassword = signal(true);
+
+  protected readonly Eye = Eye;
+  protected readonly EyeOff = EyeOff;
 
   constructor(
     private authService: AuthService,
@@ -33,5 +38,9 @@ export class Login {
           err.status === 0 ? 'Cannot reach the server.' : 'Incorrect username or password.');
       },
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword.update(v => !v);
   }
 }

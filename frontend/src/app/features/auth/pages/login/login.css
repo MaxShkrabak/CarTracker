@@ -1,19 +1,51 @@
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
+/* Login page styling */
 .forgot-password {
   align-self: flex-end;
-  margin-top: 2px;
+  margin-top: 8px;
   font-size: 12px;
-  text-decoration: none;
 }
 
 .btn-primary {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
-.sign-up {
-  font-size: 14px;
+.input-wrapper .login-input {
+  padding-right: 2.5rem;
+}
+
+.input-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.toggle-eye {
+  position: absolute;
+  display: flex;
+  background: none;
+  border: none;
+  padding: 0;
+  right: 0.5rem;
+  top: 0.6rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.toggle-eye:hover {
+  opacity: 1;
+}
+
+.toggle-eye ::ng-deep svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (pointer: coarse) {
+  .toggle-eye {
+    top: 0.5rem;
+  }
+  .toggle-eye ::ng-deep svg {
+    width: 24px;
+    height: 24px;
+  }
 }

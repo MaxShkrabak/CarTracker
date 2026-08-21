@@ -29,6 +29,10 @@ export class Register {
     return passwordRules(this.password);
   }
 
+  get unmetRules(): PasswordRule[] {
+    return this.rules.filter((r) => !r.met);
+  }
+
   onRegister(form: NgForm) {
     this.errorMessage.set('');
     this.passwordMismatch = false;
