@@ -2,13 +2,13 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
-import { passwordRules, PasswordRule } from '../../password-rules';
+import { passwordRules } from '../../password-rules';
 
 type Step = 'email' | 'token' | 'password';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })
