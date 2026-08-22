@@ -29,6 +29,9 @@ export class ForgotPassword {
 
   // User requesting token to reset password
   onSendToken() {
+    const email = this.email().trim();
+
+    if (!email || this.loading()) return;
     this.loading.set(true);
     this.error.set(null);
     this.auth.forgotPassword({ email : this.email() }).subscribe({

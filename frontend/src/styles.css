@@ -1,11 +1,13 @@
 /* Global styles */
 :root {
   --color-bg: #322D27;
+  --color-bg-secondary: #3F3931;
   --color-surface: #7F7265;
   --color-text: #E2E1EB;
   --color-accent: #BF8440;
   --color-accent-hover: #D9A063;
   --color-danger: #D96666;
+  --color-success: #6BA368;
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -38,12 +40,24 @@ input, button, textarea, select {
 }
 
 .auth-container {
-  padding: 1rem;
+  padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 80dvh;
+}
+
+.auth-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  max-width: var(--field-width);
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-bg-secondary);
 }
 
 .form-container {

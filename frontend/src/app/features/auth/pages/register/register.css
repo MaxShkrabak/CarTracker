@@ -1,8 +1,57 @@
 /* Register page styling */
-.confirm-password {
-  margin-top: 0.5rem;
+.password-rules-card {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-text);
+  border-radius: var(--radius-sm);
+  background-color: #7f726548;
+}
+
+.password-rules-card p {
+  margin-top: 0;
+  color: var(--color-text);
 }
 
 .password-rules {
-  color: var(--color-danger);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text);
+}
+
+.password-rules li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.circle-check {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.password-rules li.met .circle-check {
+  color: var(--color-success);
+}
+
+.password-rules-card.complete {
+  border-color: var(--color-success);
+  background-color: rgba(0, 128, 0, 0.199);
+}
+
+.password-rules-card.complete p {
+  color: var(--color-success);
+}
+
+.circle-check ::ng-deep svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.sign-in {
+  margin-top: 2rem;
+  margin-bottom: -1rem;
 }

@@ -5,10 +5,6 @@
   font-size: 12px;
 }
 
-.btn-primary {
-  margin-top: 1rem;
-}
-
 .input-wrapper .login-input {
   padding-right: 2.5rem;
 }
@@ -38,6 +34,11 @@
 .toggle-eye ::ng-deep svg {
   width: 20px;
   height: 20px;
+}
+
+.sign-up {
+  margin-top: 2rem;
+  margin-bottom: -1rem;
 }
 
 @media (pointer: coarse) {

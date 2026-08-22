@@ -3,10 +3,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
 import { passwordRules, PasswordRule } from '../../password-rules';
+import { Circle, LucideAngularModule, CircleCheck } from 'lucide-angular';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, LucideAngularModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -25,12 +26,15 @@ export class Register {
   shakeInvalid = false;
   passwordMismatch = false;
 
+  protected readonly Circle = Circle;
+  protected readonly CircleCheck = CircleCheck;
+
   get rules(): PasswordRule[] {
     return passwordRules(this.password);
   }
 
-  get unmetRules(): PasswordRule[] {
-    return this.rules.filter((r) => !r.met);
+  get passwordComplete(): boolean {
+    return this.rules.every((r) => r.met);
   }
 
   onRegister(form: NgForm) {

@@ -4,6 +4,7 @@ import { Register } from './features/auth/pages/register/register';
 import { ForgotPassword } from './features/auth/pages/forgot-password/forgot-password';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     component: Login
