@@ -3,7 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
 import { passwordRules, PasswordRule } from '../../password-rules';
-import { Circle, LucideAngularModule, CircleCheck } from 'lucide-angular';
+import { Circle, LucideAngularModule, CircleCheck, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +21,7 @@ export class Register {
   confirmpassword = '';
   errorMessage = signal('');
   loading = signal(false);
+  hidePassword = signal(true);
 
   shakeRules = false;
   shakeInvalid = false;
@@ -28,6 +29,8 @@ export class Register {
 
   protected readonly Circle = Circle;
   protected readonly CircleCheck = CircleCheck;
+  protected readonly EyeOff = EyeOff;
+  protected readonly Eye = Eye;
 
   get rules(): PasswordRule[] {
     return passwordRules(this.password);
@@ -93,5 +96,9 @@ export class Register {
           }
         },
       });
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword.update(v => !v);
   }
 }

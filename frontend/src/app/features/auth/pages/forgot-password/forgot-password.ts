@@ -2,16 +2,18 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth';
-import { passwordRules } from '../../password-rules';
+import { passwordRules, PasswordRule } from '../../password-rules';
+import { LucideAngularModule, Circle, CircleCheck, Eye, EyeOff } from 'lucide-angular';
 
 type Step = 'email' | 'token' | 'password';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink, LucideAngularModule],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })
+
 export class ForgotPassword {
   private auth = inject(AuthService);
   private router = inject(Router);
@@ -24,8 +26,15 @@ export class ForgotPassword {
   error = signal<string | null>(null);
   success = signal<string | null>(null);
   loading = signal(false);
+  hidePassword = signal(true);
 
-  rules = computed(() => passwordRules(this.newPassword()));
+  protected readonly CircleCheck = CircleCheck;
+  protected readonly Circle = Circle;
+  protected readonly Eye = Eye;
+  protected readonly EyeOff = EyeOff;
+
+  readonly rules = computed(() => passwordRules(this.newPassword()));
+  readonly passwordComplete = computed(() => this.rules().every((r) => r.met));
 
   // User requesting token to reset password
   onSendToken() {
@@ -34,6 +43,7 @@ export class ForgotPassword {
     if (!email || this.loading()) return;
     this.loading.set(true);
     this.error.set(null);
+
     this.auth.forgotPassword({ email : this.email() }).subscribe({
       next: () => { this.step.set('token'); this.loading.set(false);},
       error: () => { this.step.set('token'); this.loading.set(false);},
@@ -44,6 +54,7 @@ export class ForgotPassword {
   onVerifyToken() {
     this.loading.set(true);
     this.error.set(null);
+
     this.auth.verifyToken({ email: this.email(), token: this.token() }).subscribe({
       next: () => { this.step.set('password'); this.loading.set(false);},
       error: () => { this.error.set('Token is invalid or expired.'); this.loading.set(false);},
@@ -64,9 +75,14 @@ export class ForgotPassword {
 
     this.loading.set(true);
     this.error.set(null);
+
     this.auth.resetPassword({ email: this.email(), token: this.token(), newPassword: this.newPassword() }).subscribe({
       next: () => { this.router.navigate(['/login']); this.loading.set(false); },
       error: () => { this.error.set('Could not reset the password. Please try again.'); this.loading.set(false);},
     });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword.update((v) => !v);
   }
 }
