@@ -6,8 +6,10 @@
   --color-text: #E2E1EB;
   --color-accent: #BF8440;
   --color-accent-hover: #D9A063;
-  --color-danger: #D96666;
-  --color-success: #6BA368;
+  --color-danger: #B84040;
+  --color-danger-strong: #8F2828;
+  --color-success: #55A151;
+  --color-success-strong: #316E2D;
 
   --radius-sm: 4px;
   --radius-md: 8px;

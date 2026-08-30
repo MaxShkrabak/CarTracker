@@ -1,0 +1,40 @@
+.obd-container {
+  width: 100%;
+  padding: 0rem 1rem 1rem 1rem;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  box-sizing: border-box;
+}
+
+.obd-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+}
+
+.status-circle {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--color-danger);
+  border: 2px solid var(--color-danger-strong);
+  box-shadow: 0 0 6px 1px rgba(255, 0, 0, 0.733);
+}
+
+.status-circle.active {
+  background: var(--color-success);
+  border: 2px solid var(--color-success-strong);
+  box-shadow: 0 0 6px 1px rgba(111, 175, 85, 0.685);
+}
+
+.btn-primary {
+  background: var(--color-success);
+}
+
+.description {
+  margin: 0;
+  margin-bottom: 1rem;
+}

@@ -1,3 +1,15 @@
-<p>obd works!</p>
-<button type="button" (click)="obd.connect()">Find OBD2 device</button>
-<p>{{ obd.status() }}</p>
+<div class="obd-container">
+  <div class="obd-header">
+    <span class="status-circle" [class.active]="obd.status().startsWith('Connected to')"></span>
+    <h2>Connect to OBD2</h2>
+  </div>
+  <p class="description">Connect your OBD2 adapter to start streaming real-time data.</p>
+
+  <button
+    class="btn-primary"
+    type="button"
+    (click)="obd.status().startsWith('Connected to') ? obd.disconnect() : obd.connect()"
+  >
+    {{ obd.status().startsWith('Connected to') ? 'Disconnect OBD2' : 'Connect OBD2' }}
+  </button>
+</div>
