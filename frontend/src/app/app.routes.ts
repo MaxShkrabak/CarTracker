@@ -19,10 +19,14 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard)
+    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+  },
+  {
+    path: 'vehicle/add',
+    loadComponent: () => import('./features/dashboard/components/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
   },
   {
     path: '**',
-    loadComponent: () => import('./shared/pages/not-found/not-found').then(m => m.NotFound)
+    loadComponent: () => import('./shared/pages/not-found/not-found').then(m => m.NotFound),
   }
 ];

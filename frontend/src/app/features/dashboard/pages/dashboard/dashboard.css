@@ -1,0 +1,15 @@
+.dashboard {
+    margin: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.greeting { 
+    margin: 1rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+}

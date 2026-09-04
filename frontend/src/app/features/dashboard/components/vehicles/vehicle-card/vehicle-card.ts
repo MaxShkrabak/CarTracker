@@ -1,8 +1,7 @@
 import { Component, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VehicleService } from '../../../../core/vehicle-service';
-import { Vehicle } from '../../models/vehicle';
-import 'iconify-icon';
+import { VehicleService } from '../../../../../core/vehicle-service';
+import { Vehicle } from '../vehicle';
 
 @Component({
   selector: 'app-vehicle-card',

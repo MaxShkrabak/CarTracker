@@ -1,0 +1,137 @@
+<div class="vehicle-form">
+  <h1>Add Vehicle</h1>
+  <p>Enter your vehicle details to start tracking and monitoring.</p>
+
+  <a routerLink="/dashboard" class="btn-secondary">◀ Back to Dashboard</a>
+
+  <div class="form-container">
+    <h2>Vehicle Information</h2>
+
+    <div class="decode">
+      <!-- Decode VIN -->
+      <mat-form-field>
+        <mat-label>VIN</mat-label>
+        <input
+          matInput
+          name="vin"
+          [(ngModel)]="newVehicle.vin"
+          (ngModelChange)="onVinChange($event)"
+          maxlength="17"
+        />
+      </mat-form-field>
+
+      <button class="btn-primary" (click)="vehicleDecode()">Decode</button>
+    </div>
+
+    <div class="input-fields">
+      <p>Please fill out the required fields.</p>
+
+      <!-- Make -->
+      <mat-form-field>
+        <mat-label>Make</mat-label>
+        <mat-select
+          name="make"
+          [(ngModel)]="newVehicle.make"
+          (selectionChange)="onMakeChange()"
+          required
+        >
+          <mat-option></mat-option>
+          @for (make of makes; track make) {
+            <mat-option [value]="make">{{ make }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Model -->
+      <mat-form-field>
+        <mat-label>Model</mat-label>
+        <mat-select
+          name="model"
+          [(ngModel)]="newVehicle.model"
+          [disabled]="!newVehicle.make"
+          required
+        >
+          <mat-option></mat-option>
+          @for (model of models; track model) {
+            <mat-option [value]="model">{{ model }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Model Year -->
+      <mat-form-field>
+        <mat-label>Year</mat-label>
+        <mat-select name="modelYear" [(ngModel)]="newVehicle.modelYear" required>
+          @for (year of years; track year) {
+            <mat-option [value]="year">{{ year }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Mileage -->
+      <mat-form-field>
+        <mat-label>Mileage</mat-label>
+        <input
+          matInput
+          name="mileage"
+          [(ngModel)]="newVehicle.mileage"
+          type="number"
+          min="0"
+          step="1000"
+        />
+      </mat-form-field>
+
+      <!-- Color -->
+      <mat-form-field>
+        <mat-label>Color</mat-label>
+        <input matInput name="color" pattern="[^0-9]*" />
+      </mat-form-field>
+
+      <!-- License Plate -->
+      <mat-form-field>
+        <mat-label>License Plate</mat-label>
+        <input matInput name="licensePlate" [(ngModel)]="newVehicle.licensePlate" />
+      </mat-form-field>
+
+      <!-- Body -->
+      <mat-form-field>
+        <mat-label>Body</mat-label>
+        <input matInput name="body" [(ngModel)]="newVehicle.bodyClass" />
+      </mat-form-field>
+
+      <!-- Trim-->
+      <mat-form-field>
+        <mat-label>Trim</mat-label>
+        <mat-select name="trim" [(ngModel)]="newVehicle.trim" [disabled]="!newVehicle.make">
+          @for (trim of trims; track trim) {
+            <mat-option [value]="trim">{{ trim }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Transmission Style -->
+      <mat-form-field>
+        <mat-label>Transmission Style</mat-label>
+        <mat-select name="transmission" [(ngModel)]="newVehicle.transmissionStyle">
+          @for (transmission of transmissions; track transmission) {
+            <mat-option [value]="transmission">{{ transmission }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Engine Cylinders -->
+      <mat-form-field>
+        <mat-label>Cylinders</mat-label>
+        <input matInput name="cylinders" [(ngModel)]="newVehicle.engineCylinders" />
+      </mat-form-field>
+
+      <!-- Horse Power -->
+      <mat-form-field>
+        <mat-label>Horse Power</mat-label>
+        <input matInput name="horsePower" [(ngModel)]="newVehicle.engineHP" />
+      </mat-form-field>
+    </div>
+
+    <button class="btn-primary">Save Vehicle</button>
+  </div>
+</div>

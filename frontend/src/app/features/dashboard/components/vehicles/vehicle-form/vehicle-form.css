@@ -1,0 +1,9 @@
+.vehicle-form {
+  padding: 2rem;
+}
+
+.decode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}

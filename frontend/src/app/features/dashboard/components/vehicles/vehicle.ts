@@ -10,7 +10,6 @@ export interface Vehicle {
     transmissionStyle: string;
     engineCylinders: number;
     engineHP: number;
-    doors: number;
     mileage: number;
     licensePlate: string; 
 }
