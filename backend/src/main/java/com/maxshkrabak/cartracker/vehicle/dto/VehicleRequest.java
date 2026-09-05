@@ -11,7 +11,6 @@ public record VehicleRequest(
                 String transmissionStyle,
                 int engineCylinders,
                 int engineHP,
-                int doors,
                 int mileage,
                 String licensePlate
             ) {

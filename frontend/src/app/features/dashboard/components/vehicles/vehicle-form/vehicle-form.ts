@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -20,6 +20,10 @@ export class VehicleForm {
   private readonly toastr = inject(ToastrService);
   private vehicleService = inject(VehicleService);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor(
+      private router: Router,
+    ) {}
 
   minYear = 1996;
   maxYear = new Date().getFullYear() + 1;
@@ -43,6 +47,24 @@ export class VehicleForm {
     mileage: 0,
     licensePlate: '',
   };
+
+  private resetForm(): void {
+    this.newVehicle = {
+      vid: 0,
+      vin: '',
+      make: '',
+      model: '',
+      modelYear: new Date().getFullYear(),
+      bodyClass: '',
+      trim: '',
+      color: '',
+      transmissionStyle: '',
+      engineCylinders: 0,
+      engineHP: 0,
+      mileage: 0,
+      licensePlate: '',
+    }
+  }
 
   get models(): string[] {
     return MODELS_BY_MAKE[this.newVehicle.make] ?? [];
@@ -146,5 +168,18 @@ export class VehicleForm {
     }
 
     this.cdr.markForCheck();
+  }
+
+  saveVehicle(): void {
+    this.vehicleService.saveVehicle(this.newVehicle).subscribe({
+      next: () => {
+        this.toastr.success("Vehicle has been saved.", "Vehicle");
+        this.resetForm();
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.toastr.error("Something went wrong. Could not save vehicle.", "Vehicle");
+      }
+    })
   }
 }

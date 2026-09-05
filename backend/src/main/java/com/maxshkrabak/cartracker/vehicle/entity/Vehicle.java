@@ -27,7 +27,6 @@ public class Vehicle {
     private String transmissionStyle;
     private int engineCylinders;
     private int engineHP;
-    private int doors;
     private int mileage;
     private String licensePlate;
 

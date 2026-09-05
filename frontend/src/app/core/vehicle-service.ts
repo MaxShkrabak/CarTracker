@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+  import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../features/dashboard/components/vehicles/vehicle';
 import { Observable } from 'rxjs';
@@ -20,5 +20,9 @@ export class VehicleService {
     return this.http.get<VinDecodeResponse>(`${this.apiUrl}/decode/${encodeURIComponent(vin)}`, {
       withCredentials: true,
     });
+  }
+
+  saveVehicle(vehicle: Vehicle): Observable<Vehicle> {
+    return this.http.post<Vehicle>(`${this.apiUrl}/add`, vehicle, { withCredentials: true });
   }
 }
