@@ -1,8 +1,8 @@
   import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Vehicle } from '../features/dashboard/components/vehicles/vehicle';
+import { Vehicle } from '../features/dashboard/components/vehicles/models/vehicle';
 import { Observable } from 'rxjs';
-import { VinDecodeResponse } from '../features/dashboard/components/vehicles/vin-decode-response';
+import { VinDecodeResponse } from '../features/dashboard/components/vehicles/models/vin-decode-response';
 
 @Injectable({
   providedIn: 'root',

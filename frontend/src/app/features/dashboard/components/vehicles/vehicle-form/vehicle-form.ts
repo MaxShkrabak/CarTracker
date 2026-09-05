@@ -1,18 +1,19 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { Vehicle } from '../vehicle';
-import { MAKES, MODELS_BY_MAKE, TRANSMISSION_TYPES, TRIMS_BY_MAKE } from '../vehicle-options';
+import { Vehicle } from '../models/vehicle';
+import { MAKES, MODELS_BY_MAKE, TRANSMISSION_TYPES, TRIMS_BY_MAKE } from '../models/vehicle-options';
 import { VehicleService } from '../../../../../core/vehicle-service';
 import { ToastrService } from 'ngx-toastr';
-import { VinDecodeResponse } from '../vin-decode-response';
+import { VinDecodeResponse } from '../models/vin-decode-response';
 
 @Component({
   selector: 'app-vehicle-form',
   imports: [RouterLink, MatSelectModule, MatFormFieldModule, FormsModule, MatInputModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './vehicle-form.html',
   styleUrl: './vehicle-form.css',
 })

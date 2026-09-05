@@ -1,12 +1,11 @@
 <div class="vehicle-form">
+    <a routerLink="/dashboard" class="btn-secondary">◀ Back to Dashboard</a>
   <h1>Add Vehicle</h1>
   <p>Enter your vehicle details to start tracking and monitoring.</p>
 
-  <a routerLink="/dashboard" class="btn-secondary">◀ Back to Dashboard</a>
-
   <div class="form-container">
-    <h2>Vehicle Information</h2>
 
+    <h2>VIN Lookup <span class="optional">(Optional)</span></h2>
     <div class="decode">
       <!-- Decode VIN -->
       <mat-form-field>
@@ -21,10 +20,13 @@
       </mat-form-field>
 
       <button class="btn-primary" (click)="vehicleDecode()">Decode</button>
+      <p class="info">🛈 You can decode your VIN to auto-fill details, or keep it as entered.</p>
     </div>
 
+    <hr>
+
+    <p class="info">Please fill out the required fields.</p>
     <div class="input-fields">
-      <p>Please fill out the required fields.</p>
 
       <!-- Make -->
       <mat-form-field>
@@ -132,6 +134,6 @@
       </mat-form-field>
     </div>
 
-    <button class="btn-primary" (click)="saveVehicle()">Save Vehicle</button>
+    <button class="btn-primary" (click)="saveVehicle()"><iconify-icon icon="mdi:car"></iconify-icon>Save Vehicle</button>
   </div>
 </div>
