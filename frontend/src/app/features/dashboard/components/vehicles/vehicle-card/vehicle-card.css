@@ -1,9 +1,66 @@
-.vehicle-card {
-    border: 3px solid var(--color-accent);
-    padding: 2rem;
+:host {
+    display: block;
+    flex: 1;
+}
+
+.vehicle-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.vehicle-header a {
+    color: var(--color-accent);
+    margin-left: auto;
+}
+
+.car-container {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-secondary);
+}
+
+.car-avatar {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
     background-color: var(--color-bg);
 }
 
-.car-icon {
-    border: 2px solid black;
+.car-body {
+    flex: 1;
+}
+
+.car-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.75rem;
+}
+
+.car-details > div {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.5rem;
+    align-items: center;
+}
+
+.car-details iconify-icon {
+    display: inline-flex;
+    padding: 0.35rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+}
+
+.car-details span {
+    color: var(--color-text-secondary);
+}
+
+.car-details p {
+    grid-column: 2;
+    margin: 0.15rem 0 0;
 }

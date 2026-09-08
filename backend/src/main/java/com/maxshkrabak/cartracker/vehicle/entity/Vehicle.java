@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-@Table(name = "vehicles")
+@Table(name = "vehicles", uniqueConstraints = @UniqueConstraint(columnNames = {"vin", "uid"}))
 public class Vehicle {
 
     @Id

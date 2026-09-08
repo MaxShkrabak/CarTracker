@@ -174,11 +174,12 @@ input, button, textarea, select {
   }
 }
 
-/* Angular Material form fields.
-   Skinned to match the plain `.form-group input` above: same surface, the same
-   accent border that brightens on focus, and the app font instead of Material's
-   Roboto/body-large metrics. Floating-label behaviour is left as Material
-   ships it. */
+.component-container {
+  padding: 1rem;
+  border: 3px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+
 mat-form-field {
   width: 100%;
 
@@ -198,9 +199,6 @@ mat-form-field {
   --mat-select-enabled-arrow-color: var(--color-accent);
   --mat-select-focused-arrow-color: var(--color-accent-hover);
 
-  /* Disabled. Material's defaults here resolve against its own light palette,
-     which is why a disabled field reads as near-transparent with black text on
-     this background. These are separate tokens from the enabled ones above. */
   --mat-form-field-filled-disabled-container-color:
       color-mix(in srgb, var(--color-surface) 55%, var(--color-bg));
   --mat-form-field-filled-disabled-input-text-color:
@@ -214,8 +212,6 @@ mat-form-field {
   --mat-select-disabled-arrow-color:
       color-mix(in srgb, var(--color-text) 35%, transparent);
 
-  /* Material's body-large scale is 16px with letter-spacing; `.form-group input`
-     inherits 14px Inter from the body. */
   --mat-form-field-container-text-font: Inter, sans-serif;
   --mat-form-field-container-text-size: 14px;
   --mat-form-field-container-text-line-height: 20px;
@@ -227,25 +223,17 @@ mat-form-field {
   --mat-select-trigger-text-size: 14px;
   --mat-select-trigger-text-tracking: normal;
 
-  /* Tighter than the density scale allows: density -2 would give a 48px box but
-     also hides the filled label, so the height and padding are set directly.
-     The top padding has to stay large enough for the label to float into. */
   --mat-form-field-container-height: 44px;
   --mat-form-field-filled-with-label-container-padding-top: 18px;
   --mat-form-field-filled-with-label-container-padding-bottom: 4px;
   --mat-form-field-container-vertical-padding: 10px;
 
-  /* Drop the fill underline and the hover/focus tint overlay: the plain input
-     has a border on all four sides and no state layer. */
   --mat-form-field-filled-active-indicator-height: 0;
   --mat-form-field-filled-focus-active-indicator-height: 0;
   --mat-form-field-hover-state-layer-opacity: 0;
   --mat-form-field-focus-state-layer-opacity: 0;
 }
 
-/* The fill container rounds only its top two corners (the bottom pair is
-   hard-coded to 0 to seat the underline), and its 16px side padding has no
-   token, so both are set here to match `.form-group input`. */
 mat-form-field .mat-mdc-text-field-wrapper {
   padding-left: 10px;
   padding-right: 10px;
@@ -271,7 +259,6 @@ mat-form-field.mat-form-field-invalid.mat-focused .mat-mdc-text-field-wrapper {
   box-shadow: 0 0 4px 1px #eb36367e;
 }
 
-/* The dropdown renders in a CDK overlay on <body>, outside every component. */
 .mat-mdc-select-panel {
   --mat-select-panel-background-color: var(--color-bg-secondary);
   --mat-option-label-text-color: var(--color-text);
@@ -283,12 +270,6 @@ mat-form-field.mat-form-field-invalid.mat-focused .mat-mdc-text-field-wrapper {
   --mat-option-focus-state-layer-color: #d9a06326;
 }
 
-/* MatSelect tries to open below the trigger first and only flips above when the
-   panel does not fit in the viewport (`select.mjs` position list). Its 275px
-   default is taller than the space below a mid-page field on a short screen, so
-   cap it against the viewport to keep the "below" position viable. `min()` makes
-   this self-scoping: on a tall screen 35vh exceeds 275px and nothing changes.
-   The `div.` prefix is needed to beat Material's own `div.mat-mdc-select-panel`. */
 div.mat-mdc-select-panel {
   max-height: min(275px, 35vh);
 }

@@ -2,10 +2,11 @@ import { Component, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { VehicleService } from '../../../../../core/vehicle-service';
 import { Vehicle } from '../models/vehicle';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-card',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './vehicle-card.html',
   styleUrl: './vehicle-card.css',

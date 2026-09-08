@@ -43,7 +43,6 @@ public class VehicleService {
         return vehicleMapper.toDto(vehicleRepo.save(vehicle));
     }
 
-    // fetches ONE specific vehicle
     public VehicleDTO getVehicle(Long vid, Long uid) {
         Vehicle vehicle = vehicleRepo.findByVidAndUserUid(vid, uid).orElseThrow(VehicleNotFoundException::new);
         return vehicleMapper.toDto(vehicle);
@@ -72,5 +71,4 @@ public class VehicleService {
         vehicleMapper.updateFromDecode(decodedVehicle, vehicle);
         return vehicleMapper.toDto(vehicle);
     }
-
 }

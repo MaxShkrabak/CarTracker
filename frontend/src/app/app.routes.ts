@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
   },
   {
+    path: 'vehicles',
+    loadComponent: () => import('./features/dashboard/pages/vehicles/vehicles').then(m => m.Vehicles),
+  },
+  {
     path: 'vehicle/add',
     loadComponent: () => import('./features/dashboard/components/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
   },
