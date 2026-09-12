@@ -8,7 +8,7 @@ import { VinDecodeResponse } from '../features/dashboard/components/vehicles/mod
   providedIn: 'root',
 })
 export class VehicleService {
-  private apiUrl = 'http://localhost:8080/api/vehicle';
+  private apiUrl = '/api/vehicle';
 
   constructor(private http: HttpClient) {}
 

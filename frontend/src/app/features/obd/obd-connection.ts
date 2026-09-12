@@ -16,7 +16,11 @@ export class ObdConnection {
 
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: [0xfff0, 0xffe0, 0x18f0],
+        optionalServices: [
+          '0000fff0-0000-1000-8000-00805f9b34fb',
+          '0000ffe0-0000-1000-8000-00805f9b34fb',
+          '000018f0-0000-1000-8000-00805f9b34fb',
+        ],
       });
 
       this.status.set('Connecting…');
