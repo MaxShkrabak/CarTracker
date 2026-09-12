@@ -1,0 +1,33 @@
+.charts-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1rem;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 170px));
+  gap: 0.75rem;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-surface);
+  border-radius: var(--radius-lg);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 11px;
+}
+
+.chart {
+  width: 100%;
+}

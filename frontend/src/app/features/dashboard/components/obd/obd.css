@@ -2,7 +2,14 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: clamp(0.75rem, 2vw, 1rem);
+  font-size: 1rem;
+}
+
+.component-container {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .status-circle {
@@ -23,5 +30,6 @@
 }
 
 .btn-primary {
+  margin-top: auto;
   background: var(--color-success);
 }

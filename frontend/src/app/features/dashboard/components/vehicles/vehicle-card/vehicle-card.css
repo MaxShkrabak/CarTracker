@@ -23,15 +23,6 @@
     background-color: var(--color-bg-secondary);
 }
 
-.car-avatar {
-    display: grid;
-    place-items: center;
-    width: 4.5rem;
-    height: 4.5rem;
-    border-radius: 50%;
-    background-color: var(--color-bg);
-}
-
 .car-body {
     flex: 1;
 }

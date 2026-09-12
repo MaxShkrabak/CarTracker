@@ -1,15 +1,22 @@
 .dashboard {
     margin: 1rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(240px, 20%) minmax(0, 1fr);
+
     gap: 0.5rem;
+}
+
+app-vehicle-card,
+app-vehicle-data {
+  grid-column: 1 / -1;
 }
 
 .greeting { 
     margin: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 543px) {
   .dashboard {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

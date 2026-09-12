@@ -1,0 +1,31 @@
+<div class="component-container">
+    <h2 class="charts-title">Live Vehicle Data <span>Last Updated: Just now</span></h2> <!-- Hardcoded FIX-->
+
+    <div class="charts-grid">
+        <div class="metric-card">
+            <div class="metric-header"><span>Speed</span></div>
+            <div highchartsChart [options]="speedOptions" class="chart"></div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header"><span>RPM</span></div>
+            <div highchartsChart [options]="rpmOptions" class="chart"></div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header"><span>Coolant Temp</span></div>
+            <div highchartsChart [options]="coolantOptions" class="chart"></div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header"><span>Fuel Level</span></div>
+            <div highchartsChart [options]="fuelOptions" class="chart"></div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header"><span>Battery Voltage</span></div>
+            <div highchartsChart [options]="batteryOptions" class="chart"></div>
+        </div>
+    </div>
+
+</div>
