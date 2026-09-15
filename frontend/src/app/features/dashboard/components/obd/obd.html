@@ -12,4 +12,11 @@
   >
     {{ obd.status().startsWith('Connected to') ? 'Disconnect OBD2' : 'Connect OBD2' }}
   </button>
+  
+  <!-- Testing stuff -->
+  <button class="btn-primary" type="button" (click)="obd.write('ATZ')">Send type request</button>
+  <button class="btn-primary" type="button" (click)="obd.write('010C')">Send RPM request</button>
+  <span>Data received: {{ obd.lastResponse() }}</span>
+
+
 </div>
