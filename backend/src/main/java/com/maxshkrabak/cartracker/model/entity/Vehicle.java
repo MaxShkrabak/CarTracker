@@ -1,0 +1,35 @@
+package com.maxshkrabak.cartracker.model.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@NoArgsConstructor
+@Setter
+@Getter
+@Table(name = "vehicles", uniqueConstraints = @UniqueConstraint(columnNames = {"vin", "uid"}))
+public class Vehicle {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long vid;
+
+    private String vin;
+    private String make;
+    private String model;
+    private int modelYear;
+    private String bodyClass;
+    private String trim;
+    private String color;
+    private String transmissionStyle;
+    private int engineCylinders;
+    private int engineHP;
+    private int mileage;
+    private String licensePlate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uid")
+    private User user;
+}
