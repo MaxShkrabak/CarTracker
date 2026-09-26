@@ -1,6 +1,8 @@
 package com.maxshkrabak.cartracker.common;
 
 import com.maxshkrabak.cartracker.exception.InvalidPasswordException;
+import com.maxshkrabak.cartracker.exception.InvalidSessionIdException;
+import com.maxshkrabak.cartracker.exception.SessionAlreadyActiveException;
 import com.maxshkrabak.cartracker.exception.UserAccountDoesNotExist;
 import com.maxshkrabak.cartracker.exception.UsernameAlreadyExistsException;
 import com.maxshkrabak.cartracker.exception.VehicleNotFoundException;
@@ -46,5 +48,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(VpicUnavailableException.class)
     public ResponseEntity<String> handleVpicUnavailableException(VpicUnavailableException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.GATEWAY_TIMEOUT);
+    }
+
+    /* ----- Drive Exceptions ----- */
+    @ExceptionHandler(InvalidSessionIdException.class)
+    public ResponseEntity<String> handleInvalidSessionIdException(InvalidSessionIdException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SessionAlreadyActiveException.class)
+    public ResponseEntity<String> handleActiveSessionException(SessionAlreadyActiveException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,6 +1,5 @@
 package com.maxshkrabak.cartracker.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -29,14 +28,7 @@ public class VehicleService {
 
     // fetch all vehicles owned by user
     public List<VehicleDTO> getVehicles(Long uid) {
-        List<Vehicle> vehicles = vehicleRepo.findByUserUid(uid);
-        List<VehicleDTO> vehiclesDTOs = new ArrayList<>();
-
-        for (Vehicle vehicle : vehicles) {
-            vehiclesDTOs.add(vehicleMapper.toDto(vehicle));
-        }
-
-        return vehiclesDTOs;
+        return vehicleMapper.toDtoList(vehicleRepo.findByUserUid(uid));
     }
 
     public VehicleDTO addVehicle(VehicleRequest vehicleRequest, Long uid) {
@@ -67,7 +59,7 @@ public class VehicleService {
     public VehicleDTO updateVehicleFromDecode(String vin, Long uid) {
         VinDecodeResponse decodedVehicle = vinDecodeService.decodeVin(vin);
         Vehicle vehicle = vehicleRepo.findByVinAndUserUid(vin, uid).orElseThrow(VehicleNotFoundException::new);
-        
+
         // TOOD: Will need to add an option for adding as brand new vehicle
         // only works for updating existing car by VIN
         vehicleMapper.updateFromDecode(decodedVehicle, vehicle);

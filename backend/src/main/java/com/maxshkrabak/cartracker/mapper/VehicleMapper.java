@@ -1,5 +1,7 @@
 package com.maxshkrabak.cartracker.mapper;
 
+import java.util.List;
+
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,8 +17,10 @@ import com.maxshkrabak.cartracker.model.entity.Vehicle;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface VehicleMapper {
-    
+
     VehicleDTO toDto(Vehicle vehicle);
+
+    List<VehicleDTO> toDtoList(List<Vehicle> vehicles);
 
     @Mapping(target = "vid", ignore = true)
     Vehicle toEntity(VehicleRequest request);

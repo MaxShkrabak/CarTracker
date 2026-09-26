@@ -28,14 +28,12 @@ public class VinDecodeService {
         return new VinDecodeResponse(
                 result.path("Make").asString(),
                 result.path("BodyClass").asString(),
-                asIntOrZero(result, "Doors"),
                 asIntOrZero(result, "EngineCylinders"),
                 asIntOrZero(result, "EngineHP"),
                 result.path("Model").asString(),
                 asIntOrZero(result, "ModelYear"),
                 result.path("TransmissionStyle").asString(),
                 result.path("Trim").asString(),
-                result.path("VIN").asString()
-        );
+                result.path("VIN").asString());
     }
 }
