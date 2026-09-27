@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { HighchartsChartDirective } from 'highcharts-angular';
+import { ObdConnection } from '../../../../obd/obd-connection';
 
 const gaugeChart: Highcharts.ChartOptions = {
   type: 'gauge',
@@ -41,8 +42,13 @@ function readout(unit: string) {
   styleUrl: './vehicle-data.css',
 })
 export class VehicleData {
+  
+  constructor ( private obd: ObdConnection) {
+
+  }
+
   /* Speed Gauge */
-  speedOptions: Highcharts.Options = {
+  speedOptions = computed((): Highcharts.Options => ({
     chart: gaugeChart,
     title: { text: undefined },
     credits: { enabled: false },
@@ -62,14 +68,14 @@ export class VehicleData {
       {
         type: 'gauge',
         name: 'Speed',
-        data: [1],
+        data: [this.obd.speed()],
         dataLabels: readout('MPH'),
       },
     ],
-  };
+  }));
 
   /* RPM */
-  rpmOptions: Highcharts.Options = {
+  rpmOptions = computed((): Highcharts.Options => ({
     chart: gaugeChart,
     title: { text: undefined },
     credits: { enabled: false },
@@ -89,11 +95,11 @@ export class VehicleData {
       {
         type: 'gauge',
         name: 'RPM',
-        data: [1],
+        data: [this.obd.rpm()],
         dataLabels: readout('RPM'),
       },
     ],
-  };
+  }));
 
   /* Coolant Temp */
   coolantOptions: Highcharts.Options = {

@@ -4,12 +4,12 @@
     <div class="charts-grid">
         <div class="metric-card">
             <div class="metric-header"><span>Speed</span></div>
-            <div highchartsChart [options]="speedOptions" class="chart"></div>
+            <div highchartsChart [options]="speedOptions()" class="chart"></div>
         </div>
 
         <div class="metric-card">
             <div class="metric-header"><span>RPM</span></div>
-            <div highchartsChart [options]="rpmOptions" class="chart"></div>
+            <div highchartsChart [options]="rpmOptions()" class="chart"></div>
         </div>
 
         <div class="metric-card">
