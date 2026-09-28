@@ -42,10 +42,7 @@ function readout(unit: string) {
   styleUrl: './vehicle-data.css',
 })
 export class VehicleData {
-  
-  constructor ( private obd: ObdConnection) {
-
-  }
+  constructor(private obd: ObdConnection) {}
 
   /* Speed Gauge */
   speedOptions = computed((): Highcharts.Options => ({
@@ -102,7 +99,7 @@ export class VehicleData {
   }));
 
   /* Coolant Temp */
-  coolantOptions: Highcharts.Options = {
+  coolantOptions = computed((): Highcharts.Options => ({
     chart: gaugeChart,
     title: { text: undefined },
     credits: { enabled: false },
@@ -122,14 +119,14 @@ export class VehicleData {
       {
         type: 'gauge',
         name: 'temp',
-        data: [150],
+        data: [this.obd.coolantTemp()],
         dataLabels: readout('\u00B0F'),
       },
     ],
-  };
+  }));
 
   /* Fuel Level */
-  fuelOptions: Highcharts.Options = {
+  fuelOptions = computed((): Highcharts.Options => ({
     chart: gaugeChart,
     title: { text: undefined },
     credits: { enabled: false },
@@ -154,14 +151,14 @@ export class VehicleData {
       {
         type: 'gauge',
         name: 'Fuel',
-        data: [69.5],
+        data: [this.obd.fuelLevel()],
         dataLabels: readout('%'),
       },
     ],
-  };
+  }));
 
   /* Battery Voltage */
-  batteryOptions: Highcharts.Options = {
+  batteryOptions = computed((): Highcharts.Options => ({
     chart: gaugeChart,
     title: { text: undefined },
     credits: { enabled: false },
@@ -181,9 +178,9 @@ export class VehicleData {
       {
         type: 'gauge',
         name: 'Battery Voltage',
-        data: [13.8],
+        data: [this.obd.voltage()],
         dataLabels: readout('V'),
       },
     ],
-  };
+  }));
 }

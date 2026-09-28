@@ -1,6 +1,12 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { parseRPM, parseSpeed } from './obd-parser';
+import {
+  parseBatteryVoltage,
+  parseCoolantTemp,
+  parseFuelLevel,
+  parseRPM,
+  parseSpeed,
+} from './obd-parser';
 
 // useful: https://afshari.lu/post/213-elm/
 const VGATE_SERVICE = 'e7810a71-73ae-499d-8c15-faa9aef0c3f2'; // service id of ELM327 OBD2 BLE
@@ -21,6 +27,9 @@ export class ObdConnection {
   // OBD2 Data
   readonly speed = signal(0);
   readonly rpm = signal(0);
+  readonly coolantTemp = signal(100); // 100 is the lowest temp on graph
+  readonly fuelLevel = signal(0);
+  readonly voltage = signal(10);
 
   async connect(): Promise<void> {
     if (this.status() !== 'Not connected') return;
@@ -124,7 +133,6 @@ export class ObdConnection {
 
     while (connection !== null && this.characteristic === connection) {
       try {
-
         // vehicle speed
         const speedResponse = await this.write('010D');
         const kph = parseSpeed(speedResponse);
@@ -134,13 +142,36 @@ export class ObdConnection {
         }
 
         // rpm
-        const rpmResponse = await this.write(`010C`);
+        const rpmResponse = await this.write('010C');
         const rpm = parseRPM(rpmResponse);
 
         if (rpm !== null) {
           this.rpm.set(rpm);
         }
 
+        // coolant temp
+        const coolantResponse = await this.write('0105');
+        const coolantTemp = parseCoolantTemp(coolantResponse);
+
+        if (coolantTemp !== null) {
+          this.coolantTemp.set(Math.round((coolantTemp * 9) / 5 + 32)); // convert to fahrenheit
+        }
+
+        // fuel level
+        const fuelResponse = await this.write('012F');
+        const fuelLevel = parseFuelLevel(fuelResponse);
+
+        if (fuelLevel !== null) {
+          this.fuelLevel.set(fuelLevel);
+        }
+
+        // voltage
+        const voltageResponse = await this.write('ATRV');
+        const voltage = parseBatteryVoltage(voltageResponse);
+
+        if (voltage !== null) {
+          this.voltage.set(voltage);
+        }
       } catch (e) {
         console.warn('OBD2 poll failed:', e);
         await new Promise((resolve) => setTimeout(resolve, 500));
