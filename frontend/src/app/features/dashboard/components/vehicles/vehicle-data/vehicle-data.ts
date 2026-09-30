@@ -22,7 +22,7 @@ const gaugeAxis: Highcharts.YAxisOptions = {
   labels: { distance: 6, style: { fontSize: '9px' } },
 };
 
-function readout(unit: string) {
+function readout(unit: string, inline = false) {
   return {
     useHTML: true,
     borderWidth: 0,
@@ -143,8 +143,8 @@ export class VehicleData {
         formatter: (ctx) => (ctx.value === 0 ? 'E' : ctx.value === 100 ? 'F' : ''),
       },
       plotBands: [
-        { from: 0, to: 69.5, color: '#b0cf26' },
-        { from: 69.5, to: 100, color: '#464543' },
+        { from: 0, to: this.obd.fuelLevel(), color: '#b0cf26' },
+        { from: this.obd.fuelLevel(), to: 100, color: '#464543' },
       ],
     },
     series: [
@@ -170,8 +170,8 @@ export class VehicleData {
       tickPositions: [10, 16],
       minorTickWidth: 0,
       plotBands: [
-        { from: 10, to: 13.8, color: '#00A96B' },
-        { from: 13.8, to: 16, color: '#464543' },
+        { from: 10, to: this.obd.voltage(), color: '#00A96B' },
+        { from: this.obd.voltage(), to: 16, color: '#464543' },
       ],
     },
     series: [

@@ -58,7 +58,7 @@ export function parseFuelLevel(response: string): number | null {
   }
 
   const [a] = bytes;
-  return (100 * a) / 255;
+  return Math.round((100 * a) / 255);
 }
 
 export function parseBatteryVoltage(response: string): number | null {
