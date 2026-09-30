@@ -19,5 +19,5 @@ public interface DriveSessionRepository extends JpaRepository<DriveSession, Long
     @Query("select s from DriveSession s join fetch s.vehicle v where v.vid = :vid and v.user.uid = :uid order by s.startedAt desc")
     List<DriveSession> findUsersVehicleDriveSessions(@Param("vid") Long vid, @Param("uid") Long uid);
 
-    boolean existsByVehicle_VidAndEndedAtIsNull(Long vid);
+    Optional<DriveSession> findByVehicle_VidAndEndedAtIsNull(Long vid);
 }

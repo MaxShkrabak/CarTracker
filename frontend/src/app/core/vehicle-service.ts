@@ -1,4 +1,4 @@
-  import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle } from '../features/dashboard/components/vehicles/models/vehicle';
 import { Observable } from 'rxjs';

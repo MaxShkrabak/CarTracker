@@ -1,6 +1,13 @@
 <div class="component-container">
-  <h2 class="charts-title">Live Vehicle Data <span>Last Updated: Just now</span></h2>
-  <!-- Hardcoded FIX-->
+  <h2 class="charts-title">Live Vehicle Data
+    @if (obd.status().startsWith('Connected to')) {
+      <span>Live</span>
+    } @else if (lastUsed()) {
+      <span>Last used: {{ lastUsed() | date: 'MMM d, h:mm a' }}</span>
+    } @else {
+      <span>Connect OBD2 to use</span>
+    }
+  </h2>
 
   <div class="charts-grid">
     <div class="metric-card">

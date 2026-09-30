@@ -1,6 +1,8 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { HighchartsChartDirective } from 'highcharts-angular';
 import { ObdConnection } from '../../../../obd/obd-connection';
+import { DriveService } from '../../../../../core/drive-service';
+import { DatePipe } from '@angular/common';
 
 const gaugeChart: Highcharts.ChartOptions = {
   type: 'gauge',
@@ -37,12 +39,23 @@ function readout(unit: string, inline = false) {
 
 @Component({
   selector: 'app-vehicle-data',
-  imports: [HighchartsChartDirective],
+  imports: [HighchartsChartDirective, DatePipe ],
   templateUrl: './vehicle-data.html',
   styleUrl: './vehicle-data.css',
 })
 export class VehicleData {
-  constructor(private obd: ObdConnection) {}
+  readonly obd = inject(ObdConnection);
+  private readonly drive = inject(DriveService);
+
+  private readonly lastSessionEnd = signal<string | null>(null);
+  readonly lastUsed = computed(() => this.obd.lastDriveEnd() ?? this.lastSessionEnd());
+
+  // TODO: hardcoded (1) need to fix
+  constructor() {
+    this.drive.getVehicleSessions(1).subscribe((sessions) => {
+      this.lastSessionEnd.set(sessions.find((s) => s.endedAt !== null)?.endedAt ?? null);
+    })
+  }
 
   /* Speed Gauge */
   speedOptions = computed((): Highcharts.Options => ({

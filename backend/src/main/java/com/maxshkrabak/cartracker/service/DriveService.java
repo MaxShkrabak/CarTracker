@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.maxshkrabak.cartracker.exception.InvalidSessionIdException;
-import com.maxshkrabak.cartracker.exception.SessionAlreadyActiveException;
 import com.maxshkrabak.cartracker.exception.VehicleNotFoundException;
 import com.maxshkrabak.cartracker.mapper.DriveMapper;
 import com.maxshkrabak.cartracker.model.dto.DriveSampleDTO;
@@ -48,9 +47,13 @@ public class DriveService {
     public DriveSessionDTO startSession(Long vid, Long uid, DriveSessionRequest request) {
         Vehicle vehicle = vehicleRepo.findByVidAndUserUid(vid, uid).orElseThrow(VehicleNotFoundException::new);
 
-        if (sessionRepo.existsByVehicle_VidAndEndedAtIsNull(vid)) {
-            throw new SessionAlreadyActiveException();
-        }
+        sessionRepo.findByVehicle_VidAndEndedAtIsNull(vid).ifPresent(stale -> {
+            List<DriveSample> staleSamples = sampleRepo.findSessionSamples(stale.getSessionId());
+            Instant staleEnd = staleSamples.isEmpty() ? stale.getStartedAt()
+                    : staleSamples.get(staleSamples.size() - 1).getRecordedAt();
+
+            closeSession(stale, staleSamples, staleEnd);
+        });
 
         DriveSession session = new DriveSession();
         session.setVehicle(vehicle);
@@ -88,9 +91,15 @@ public class DriveService {
             throw new InvalidSessionIdException();
         }
 
-        session.setEndedAt(request != null && request.endedAt() != null ? request.endedAt() : Instant.now());
-
         List<DriveSample> samples = sampleRepo.findSessionSamples(sessionId);
+        closeSession(session, samples,
+                request != null && request.endedAt() != null ? request.endedAt() : Instant.now());
+
+        return driveMapper.toDto(session);
+    }
+
+    private void closeSession(DriveSession session, List<DriveSample> samples, Instant endedAt) {
+        session.setEndedAt(endedAt);
 
         Integer maxRPM = null;
         Integer maxKPH = null;
@@ -125,7 +134,5 @@ public class DriveService {
         session.setAvgRPM(rpmCount == 0 ? null : (double) rpmSum / rpmCount);
         session.setAvgKPH(kphCount == 0 ? null : (double) kphSum / kphCount);
         session.setSampleCount(samples.size());
-
-        return driveMapper.toDto(session);
     }
 }

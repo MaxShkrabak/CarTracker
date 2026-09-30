@@ -5,10 +5,11 @@
   </div>
   <p class="description">Connect your OBD2 adapter to start streaming real-time data.</p>
 
+  <!-- !!! TODO !!! fix connect(1) this is just assuming user HAS and only has 1 vehicle -->
   <button
     class="btn-primary"
     type="button"
-    (click)="obd.status().startsWith('Connected to') ? obd.disconnect() : obd.connect()"
+    (click)="obd.status().startsWith('Connected to') ? obd.disconnect() : obd.connect(1)" 
   >
     {{ obd.status().startsWith('Connected to') ? 'Disconnect OBD2' : 'Connect OBD2' }}
   </button>

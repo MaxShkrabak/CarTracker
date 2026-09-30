@@ -7,6 +7,9 @@ import {
   parseRPM,
   parseSpeed,
 } from './obd-parser';
+import { DriveService } from '../../core/drive-service';
+import { DriveSampleRequest } from '../dashboard/components/vehicles/models/drive-sample-request';
+import { firstValueFrom } from 'rxjs';
 
 // useful: https://afshari.lu/post/213-elm/
 const VGATE_SERVICE = 'e7810a71-73ae-499d-8c15-faa9aef0c3f2'; // service id of ELM327 OBD2 BLE
@@ -14,6 +17,7 @@ const VGATE_CHARACTERISTIC = 'bef8d6c9-9c21-4c9e-b632-bd58c1009f9f'; // for read
 
 @Injectable({ providedIn: 'root' })
 export class ObdConnection {
+  private readonly drive = inject(DriveService);
   private readonly toastr = inject(ToastrService);
   private readonly decoder = new TextDecoder();
   private readonly encoder = new TextEncoder();
@@ -21,9 +25,14 @@ export class ObdConnection {
   private characteristic: BluetoothRemoteGATTCharacteristic | null = null;
   private pendingResponse: ((response: string) => void) | null = null;
 
+  private sessionId: number | null = null;
+  private sampleBuffer: DriveSampleRequest[] = [];
+  private lastFlush = Date.now();
   readonly status = signal('Not connected');
   readonly lastResponse = signal('No response.');
 
+  readonly lastDriveEnd = signal<string | null>(null);
+  
   // OBD2 Data
   readonly speed = signal(0);
   readonly rpm = signal(0);
@@ -31,7 +40,7 @@ export class ObdConnection {
   readonly fuelLevel = signal(0);
   readonly voltage = signal(10);
 
-  async connect(): Promise<void> {
+  async connect(vid: number): Promise<void> {
     if (this.status() !== 'Not connected') return;
 
     try {
@@ -64,6 +73,11 @@ export class ObdConnection {
       await this.write('ATE0');
       await this.write('ATSP0');
 
+      const session = await firstValueFrom(this.drive.startSession(vid));
+      this.sessionId = session.sessionId;
+      this.sampleBuffer = [];
+      this.lastFlush = Date.now();
+
       this.pollLoop(); // start polling
     } catch (e) {
       const err = e as Error;
@@ -78,6 +92,7 @@ export class ObdConnection {
     this.device = null;
     this.characteristic = null;
     this.status.set('Not connected');
+    this.endDriveSession();
   };
 
   // Sending requests to the OBD2 to receive specific data (e.g., RPM or Speed)
@@ -172,10 +187,51 @@ export class ObdConnection {
         if (voltage !== null) {
           this.voltage.set(voltage);
         }
+
+        this.sampleBuffer.push({ recordedAt: new Date().toISOString(), rpm, kph, coolantTempC: coolantTemp });
+        if (Date.now() - this.lastFlush > 5000) {
+          await this.flushSamples();
+        }
+
       } catch (e) {
         console.warn('OBD2 poll failed:', e);
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
     }
+  }
+
+  private async flushSamples() {
+    if (this.sessionId === null || this.sampleBuffer.length === 0) {
+      return;
+    }
+    const batch = this.sampleBuffer.splice(0);
+    this.lastFlush = Date.now();
+
+    try {
+      await firstValueFrom(this.drive.addSamples(this.sessionId, batch));
+    } catch {
+      this.sampleBuffer.unshift(...batch);
+    }
+  }
+
+  private async endDriveSession(): Promise<void> {
+    const id = this.sessionId;
+    if (id === null) {
+      return;
+    }
+    this.sessionId = null;
+
+    const remaining = this.sampleBuffer.splice(0);
+
+        try {
+      if (remaining.length > 0) {
+        await firstValueFrom(this.drive.addSamples(id, remaining));
+      }
+      const ended = await firstValueFrom(this.drive.endSession(id));
+      this.lastDriveEnd.set(ended.endedAt);
+    } catch (e) {
+      console.warn('Failed to end drive session:', e);
+    }
+
   }
 }
