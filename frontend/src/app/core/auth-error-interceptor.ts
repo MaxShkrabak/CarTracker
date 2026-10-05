@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, throwError } from 'rxjs';
-import { AuthService } from './auth';
+import { AuthService } from './auth-service';
 
 export const authErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastr = inject(ToastrService);

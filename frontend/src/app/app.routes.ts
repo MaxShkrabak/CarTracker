@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { Login } from './features/auth/pages/login/login';
-import { Register } from './features/auth/pages/register/register';
-import { ForgotPassword } from './features/auth/pages/forgot-password/forgot-password';
+import { Login } from './features/auth/login/login';
+import { Register } from './features/auth/register/register';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,18 +19,18 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard),
   },
   {
     path: 'vehicles',
-    loadComponent: () => import('./features/dashboard/pages/vehicles/vehicles').then(m => m.Vehicles),
+    loadComponent: () => import('./features/vehicles/vehicle-list/vehicle-list').then(m => m.VehicleList),
   },
   {
-    path: 'vehicle/add',
-    loadComponent: () => import('./features/dashboard/components/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
+    path: 'vehicles/add',
+    loadComponent: () => import('./features/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
   },
   {
     path: '**',
-    loadComponent: () => import('./shared/pages/not-found/not-found').then(m => m.NotFound),
+    loadComponent: () => import('./shared/not-found/not-found').then(m => m.NotFound),
   }
 ];

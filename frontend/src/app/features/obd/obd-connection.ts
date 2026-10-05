@@ -7,8 +7,8 @@ import {
   parseRPM,
   parseSpeed,
 } from './obd-parser';
-import { DriveService } from '../../core/drive-service';
-import { DriveSampleRequest } from '../dashboard/components/vehicles/models/drive-sample-request';
+import { DriveService } from './drive-service';
+import { DriveSampleRequest } from './drive-models';
 import { firstValueFrom } from 'rxjs';
 
 // useful: https://afshari.lu/post/213-elm/
@@ -69,9 +69,9 @@ export class ObdConnection {
       this.status.set(`Connected to ${device.name ?? 'device'}`);
       this.toastr.success(`Connected to ${device.name ?? 'device'}`, 'OBD2');
 
-      await this.write('ATZ');
-      await this.write('ATE0');
-      await this.write('ATSP0');
+      await this.write('ATZ');   // reset device
+      await this.write('ATE0');  // disables command repeat (e.g, 010C)
+      await this.write('ATSP0'); // lets chip detect the car protocol
 
       const session = await firstValueFrom(this.drive.startSession(vid));
       this.sessionId = session.sessionId;
