@@ -26,6 +26,7 @@ export interface User {
   firstName: string;
   lastName: string;
   activated: boolean;
+  primaryVehicleId: number | null;
 }
 
 export interface VerifyTokenRequest {

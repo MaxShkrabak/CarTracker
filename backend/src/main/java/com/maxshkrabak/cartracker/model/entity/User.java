@@ -20,4 +20,8 @@ public class User {
     private String firstName;
     private String lastName;
     private boolean activated;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "primary_vehicle_id")
+    private Vehicle primaryVehicle;
 }

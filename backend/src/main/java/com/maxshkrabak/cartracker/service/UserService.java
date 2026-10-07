@@ -40,9 +40,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
 
-    // listing all users
-    public List<User> getUsers() {
-        return userRepo.findAll();
+    public UserDTO getUserDTO(Long uid) {
+        return userMapper.toDto(userRepo.findById(uid).orElseThrow(() -> new UserAccountDoesNotExist(uid)));
     }
 
     // creating a new user

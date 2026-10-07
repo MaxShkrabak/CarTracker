@@ -1,8 +1,9 @@
-import { Component, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VehicleService } from '../vehicle-service';
-import { Vehicle } from '../vehicle-models';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '@core/auth-service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-vehicle-card',
@@ -11,33 +12,12 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './vehicle-card.html',
   styleUrl: './vehicle-card.css',
 })
-export class VehicleCard implements OnInit {
-  vehicle = signal<Vehicle | null>(null);
-  errorMessage = signal('');
-  loading = signal(false);
+export class VehicleCard {
+  private vehicleService = inject(VehicleService);
+  private auth = inject(AuthService);
 
-  ngOnInit() {
-    this.getVehicle();
-  }
-
-  constructor(
-    private vehicleService: VehicleService
-  ) {}
-
-  /* Assuming 1 vehicle per user right now
-     TODO: Fix later 
-  */
-  getVehicle() {
-    this.loading.set(true);
-    this.vehicleService.getAllVehicles().subscribe({
-      next: (data) => {
-        this.vehicle.set(data[0] ?? null);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.errorMessage.set("Could not load vehicle data.");
-        this.loading.set(false);
-      }
-    })
-  }
+  vehicle = rxResource({
+    params: () => this.auth.currentUser()?.primaryVehicleId ?? undefined,
+    stream: ({ params: vid }) => this.vehicleService.getVehicle(vid),
+  });
 }

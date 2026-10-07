@@ -5,11 +5,11 @@
   </div>
 
   <div class="car-container">
-    @if (loading()) {
+    @if (vehicle.isLoading()) {
       <p>Loading...</p>
-    } @else if (errorMessage()) {
-      <p>{{ errorMessage() }}</p>
-    } @else if (vehicle(); as v) {
+    } @else if (vehicle.error()) {
+      <p>Could not load vehicle data.</p>
+    } @else if (vehicle.value(); as v) {
       <div class="car-body">
         <h3>{{ v.make | titlecase }} {{ v.model }} {{ v.modelYear }}</h3>
 

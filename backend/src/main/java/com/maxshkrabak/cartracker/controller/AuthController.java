@@ -38,10 +38,9 @@ public class AuthController {
     private final UserService userService;
     private final PasswordResetService passwordResetService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getUsers();
-        return ResponseEntity.ok(users);
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> me(@AuthenticationPrincipal CustomUserDetails principal) {
+        return ResponseEntity.ok(userService.getUserDTO(principal.getUid()));
     }
 
     @DeleteMapping("/{id}")

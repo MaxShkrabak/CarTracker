@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { VehicleCard } from '@features/vehicles/vehicle-card/vehicle-card';
 import { VehicleAddCard } from '@features/vehicles/vehicle-add-card/vehicle-add-card';
 import { VehicleData } from '@features/vehicles/vehicle-data/vehicle-data';
 import { ObdWidget } from '@features/obd/obd-widget/obd-widget';
+import { AuthService } from '@core/auth-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,5 +12,6 @@ import { ObdWidget } from '@features/obd/obd-widget/obd-widget';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  name = 'Max'; // TODO: fix hardcode
+  private auth = inject(AuthService);
+  firstName = computed(() => this.auth.currentUser()?.firstName ?? '');
 }

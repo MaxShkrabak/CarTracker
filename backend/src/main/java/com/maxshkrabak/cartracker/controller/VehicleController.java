@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxshkrabak.cartracker.model.dto.UserDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.model.dto.VehicleUpdateRequest;
@@ -36,7 +38,7 @@ public class VehicleController {
     public List<VehicleDTO> getVehicles(@AuthenticationPrincipal CustomUserDetails principal) {
         return service.getVehicles(principal.getUid());
     }
-
+    
     @PostMapping("/add")
     public ResponseEntity<VehicleDTO> addVehicle(@RequestBody VehicleRequest vehicleRequest,
             @AuthenticationPrincipal CustomUserDetails principal) {
@@ -62,6 +64,11 @@ public class VehicleController {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicle(vid, principal.getUid(), request));
     }
 
+    @PutMapping("/{vid}/primary")
+    public ResponseEntity<UserDTO> setPrimary(@PathVariable Long vid, @AuthenticationPrincipal CustomUserDetails principal) {
+        return ResponseEntity.ok(service.setPrimary(vid, principal.getUid()));
+    }
+
     @GetMapping("/decode/{vin}")
     public ResponseEntity<VinDecodeResponse> decodeAndFindByVin(@PathVariable String vin) {
         return ResponseEntity.status(HttpStatus.OK).body(vinService.decodeVin(vin));
@@ -71,4 +78,5 @@ public class VehicleController {
     public ResponseEntity<VehicleDTO> decodeAndUpdateVehicle(@PathVariable String vin, @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicleFromDecode(vin, principal.getUid()));
     }
+
 }

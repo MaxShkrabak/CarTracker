@@ -14,6 +14,7 @@ import com.maxshkrabak.cartracker.model.entity.User;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
+    @Mapping(source = "primaryVehicle.vid", target = "primaryVehicleId")
     UserDTO toDto(User user);
 
     @Mapping(target = "uid", ignore = true)

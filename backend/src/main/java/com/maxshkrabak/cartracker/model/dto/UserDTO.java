@@ -5,6 +5,7 @@ public record UserDTO(
                 String username,
                 String firstName,
                 String lastName,
-                boolean activated) {
-
+                boolean activated,
+                Long primaryVehicleId
+            ) {
 }

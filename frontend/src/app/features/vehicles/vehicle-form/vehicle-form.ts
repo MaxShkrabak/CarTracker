@@ -1,10 +1,17 @@
-import { ChangeDetectorRef, Component, inject, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import { ChangeDetectorRef, Component, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { Vehicle, VinDecodeResponse, MAKES, MODELS_BY_MAKE, TRANSMISSION_TYPES, TRIMS_BY_MAKE } from '../vehicle-models';
+import {
+  Vehicle,
+  VinDecodeResponse,
+  MAKES,
+  MODELS_BY_MAKE,
+  TRANSMISSION_TYPES,
+  TRIMS_BY_MAKE,
+} from '../vehicle-models';
 import { VehicleService } from '../vehicle-service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -19,10 +26,7 @@ export class VehicleForm {
   private readonly toastr = inject(ToastrService);
   private vehicleService = inject(VehicleService);
   private readonly cdr = inject(ChangeDetectorRef);
-
-  constructor(
-      private router: Router,
-    ) {}
+  private router = inject(Router);
 
   minYear = 1996;
   maxYear = new Date().getFullYear() + 1;
@@ -62,7 +66,7 @@ export class VehicleForm {
       engineHP: 0,
       mileage: 0,
       licensePlate: '',
-    }
+    };
   }
 
   get models(): string[] {
@@ -172,13 +176,13 @@ export class VehicleForm {
   saveVehicle(): void {
     this.vehicleService.saveVehicle(this.newVehicle).subscribe({
       next: () => {
-        this.toastr.success("Vehicle has been saved.", "Vehicle");
+        this.toastr.success('Vehicle has been saved.', 'Vehicle');
         this.resetForm();
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.toastr.error("Something went wrong. Could not save vehicle.", "Vehicle");
-      }
-    })
+        this.toastr.error('Something went wrong. Could not save vehicle.', 'Vehicle');
+      },
+    });
   }
 }

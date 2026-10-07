@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Vehicle, VinDecodeResponse } from './vehicle-models';
-import { Observable } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
+import { User } from '@core/auth-models';
+import { AuthService } from '@core/auth-service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +11,8 @@ import { Observable } from 'rxjs';
 export class VehicleService {
   private apiUrl = '/api/vehicle';
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private auth = inject(AuthService);
 
   getAllVehicles(): Observable<Vehicle[]> {
     return this.http.get<Vehicle[]>(this.apiUrl, { withCredentials: true });
@@ -23,6 +26,18 @@ export class VehicleService {
   }
 
   saveVehicle(vehicle: Vehicle): Observable<Vehicle> {
-    return this.http.post<Vehicle>(`${this.apiUrl}/add`, vehicle, { withCredentials: true });
+    return this.http
+      .post<Vehicle>(`${this.apiUrl}/add`, vehicle, { withCredentials: true })
+      .pipe(switchMap((saved) => this.auth.me().pipe(map(() => saved))));
+  }
+
+  setPrimary(vid: number): Observable<User> {
+    return this.http
+      .put<User>(`${this.apiUrl}/${vid}/primary`, null, { withCredentials: true })
+      .pipe(tap((user) => this.auth.currentUser.set(user)));
+  }
+
+  getVehicle(vid: number): Observable<Vehicle> {
+    return this.http.get<Vehicle>(`${this.apiUrl}/${vid}`, { withCredentials: true });
   }
 }

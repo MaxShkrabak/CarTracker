@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import {
@@ -17,7 +17,11 @@ export class AuthService {
   readonly currentUser = signal<User | null>(null);
   readonly isLoggedIn = computed(() => this.currentUser() !== null);
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
+
+  me(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`, {withCredentials: true}).pipe(tap((user) => this.currentUser.set(user)));
+  }
 
   login(credentials: LoginRequest): Observable<User> {
     return this.http

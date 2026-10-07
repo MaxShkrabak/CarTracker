@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.maxshkrabak.cartracker.exception.UserAccountDoesNotExist;
 import com.maxshkrabak.cartracker.exception.VehicleNotFoundException;
+import com.maxshkrabak.cartracker.mapper.UserMapper;
 import com.maxshkrabak.cartracker.mapper.VehicleMapper;
+import com.maxshkrabak.cartracker.model.dto.UserDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.model.dto.VehicleUpdateRequest;
 import com.maxshkrabak.cartracker.model.dto.VinDecodeResponse;
+import com.maxshkrabak.cartracker.model.entity.User;
 import com.maxshkrabak.cartracker.model.entity.Vehicle;
 import com.maxshkrabak.cartracker.repository.UserRepository;
 import com.maxshkrabak.cartracker.repository.VehicleRepository;
@@ -24,6 +28,7 @@ public class VehicleService {
     private final VehicleRepository vehicleRepo;
     private final UserRepository userRepo;
     private final VehicleMapper vehicleMapper;
+    private final UserMapper userMapper;
     private final VinDecodeService vinDecodeService;
 
     // fetch all vehicles owned by user
@@ -31,10 +36,19 @@ public class VehicleService {
         return vehicleMapper.toDtoList(vehicleRepo.findByUserUid(uid));
     }
 
+    @Transactional
     public VehicleDTO addVehicle(VehicleRequest vehicleRequest, Long uid) {
+        User user = userRepo.findById(uid).orElseThrow(() -> new UserAccountDoesNotExist(uid));
+
         Vehicle vehicle = vehicleMapper.toEntity(vehicleRequest);
-        vehicle.setUser(userRepo.getReferenceById(uid));
-        return vehicleMapper.toDto(vehicleRepo.save(vehicle));
+        vehicle.setUser(user);
+        Vehicle saved = vehicleRepo.save(vehicle);
+
+        if (user.getPrimaryVehicle() == null) {
+            user.setPrimaryVehicle(saved);
+        }
+        
+        return vehicleMapper.toDto(saved);
     }
 
     public VehicleDTO getVehicle(Long vid, Long uid) {
@@ -64,5 +78,14 @@ public class VehicleService {
         // only works for updating existing car by VIN
         vehicleMapper.updateFromDecode(decodedVehicle, vehicle);
         return vehicleMapper.toDto(vehicle);
+    }
+
+    @Transactional
+    public UserDTO setPrimary(Long vid, Long uid) {
+        Vehicle vehicle = vehicleRepo.findByVidAndUserUid(vid, uid).orElseThrow(VehicleNotFoundException::new);
+        User user = vehicle.getUser();
+        user.setPrimaryVehicle(vehicle);
+
+        return userMapper.toDto(user);
     }
 }
