@@ -13,8 +13,8 @@ import { firstValueFrom } from 'rxjs';
 
 // useful: https://afshari.lu/post/213-elm/
 const VGATE_SERVICE = 'e7810a71-73ae-499d-8c15-faa9aef0c3f2'; // service id of ELM327 OBD2 BLE
-const VGATE_CHARACTERISTIC = 'bef8d6c9-9c21-4c9e-b632-bd58c1009f9f'; // for read and write
-
+const VGATE_CHARACTERISTIC = 'bef8d6c9-9c21-4c9e-b632-bd58c1009f9f'; // read and write channel
+ 
 @Injectable({ providedIn: 'root' })
 export class ObdConnection {
   private readonly drive = inject(DriveService);
