@@ -40,4 +40,8 @@ export class VehicleService {
   getVehicle(vid: number): Observable<Vehicle> {
     return this.http.get<Vehicle>(`${this.apiUrl}/${vid}`, { withCredentials: true });
   }
+
+  deleteVehicle(vid: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${vid}`, { withCredentials: true });
+  }
 }

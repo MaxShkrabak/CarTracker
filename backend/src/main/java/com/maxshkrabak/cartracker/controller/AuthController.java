@@ -1,7 +1,5 @@
 package com.maxshkrabak.cartracker.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +19,6 @@ import com.maxshkrabak.cartracker.model.dto.ResetPasswordRequest;
 import com.maxshkrabak.cartracker.model.dto.UserDTO;
 import com.maxshkrabak.cartracker.model.dto.UserUpdateRequest;
 import com.maxshkrabak.cartracker.model.dto.VerifyResetTokenRequest;
-import com.maxshkrabak.cartracker.model.entity.User;
 import com.maxshkrabak.cartracker.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.service.PasswordResetService;
 import com.maxshkrabak.cartracker.service.UserService;

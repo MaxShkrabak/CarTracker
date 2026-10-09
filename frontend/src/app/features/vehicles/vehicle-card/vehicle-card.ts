@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VehicleService } from '../vehicle-service';
 import { RouterLink } from '@angular/router';

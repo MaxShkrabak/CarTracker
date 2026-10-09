@@ -1,6 +1,5 @@
 package com.maxshkrabak.cartracker.service;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.security.authentication.AuthenticationManager;

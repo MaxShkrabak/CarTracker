@@ -1,1 +1,41 @@
-<p>vehicles-list works!</p>
+<div class="vehicle-list">
+  <a routerLink="/dashboard" class="btn-secondary desktop-back">◀ Back to Dashboard</a>
+
+  <div class="list-header">
+    <div class="title-block">
+      <h1>My vehicles</h1>
+      <p>
+        {{ vehicles().length }} vehicles · Your primary vehicle will be displayed on the dashboard
+      </p>
+      <!-- TODO: fix hardcode -->
+    </div>
+    <mat-form-field class="sort-field" subscriptSizing="dynamic">
+      <span matTextPrefix class="sort-label">Sort:&nbsp;</span>
+      <mat-select [(ngModel)]="sortBy" (selectionChange)="applySort()">
+        <mat-option value="year-desc">Year (newest)</mat-option>
+        <mat-option value="year-asc">Year (oldest)</mat-option>
+        <mat-option value="mileage">Mileage</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button class="btn-primary" [routerLink]="['/vehicles/add']">+ Add Vehicle</button>
+  </div>
+
+  <div class="mobile-header">
+    <a routerLink="/dashboard" class="icon-btn" aria-label="Back to dashboard"> &lsaquo; </a>
+    <h1>My vehicles</h1>
+    <button
+      class="icon-btn icon-btn-primary"
+      aria-label="Add vehicle"
+      [routerLink]="['/vehicles/add']"
+    >
+      +
+    </button>
+  </div>
+  <p class="mobile-desc">Tap the star to choose which vehicle shows on your dashboard</p>
+
+  <div class="vehicle-grid">
+    @for (v of vehicles(); track v) {
+      <app-vehicle-list-card [vehicle]="v" (deleted)="onVehicleDeleted($event)" />
+    }
+  </div>
+</div>

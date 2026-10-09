@@ -1,0 +1,84 @@
+<div class="vehicle-list-card">
+  <div class="list-card-header">
+    <div class="title">
+      <h3>{{ vehicle().make }} {{ vehicle().model }}</h3>
+      <p>{{ vehicle().trim }} · {{ vehicle().bodyClass }} · {{ vehicle().transmissionStyle }}</p>
+    </div>
+    @if (!isPrimary()) {
+      <button class="star-btn" (click)="setPrimary()">
+        <iconify-icon icon="mdi:star-outline" width="20"></iconify-icon>
+      </button>
+    } @else {
+      <span class="primary-badge">
+        <iconify-icon icon="mdi:star" width="16"></iconify-icon>
+        Primary
+      </span>
+    }
+  </div>
+
+  <div class="list-card-info">
+    <div class="stat">
+      <span class="stat-label">Odometer</span>
+      <span class="stat-value">{{ vehicle().mileage }} mi</span>
+    </div>
+    <!-- TODO: implement trouble code functionality-->
+    <div class="stat">
+      <span class="stat-label">Trouble codes</span>
+      <span class="stat-value">TBD</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Last drive</span>
+      <span class="stat-value">{{ lastUsed() }}</span>
+    </div>
+  </div>
+  <div class="list-card-vin">
+    <span>VIN {{ vehicle().vin }}</span>
+  </div>
+
+  <div class="list-card-footer">
+    @if (!isPrimary()) {
+      <button class="set-primary-btn" (click)="setPrimary()">
+        <iconify-icon icon="mdi:star-outline" width="20"></iconify-icon>
+        Set as Primary
+      </button>
+    } @else {
+      <p class="primary-text">Shown on your dashboard</p>
+    }
+
+    <div class="footer-right-options">
+      <!-- Open vehicle details-->
+      <button class="open-vehicle-btn">Open</button>
+
+      <!-- Burger Menu -->
+      <button
+        matIconButton
+        class="burger-menu"
+        [matMenuTriggerFor]="vehicleMenu"
+        aria-label="More vehicle options"
+      >
+        <iconify-icon icon="mdi:dots-horizontal" width="20"></iconify-icon>
+      </button>
+    </div>
+    <mat-menu #vehicleMenu="matMenu" xPosition="before">
+      @if (!isPrimary()) {
+        <button mat-menu-item (click)="setPrimary()">
+          <iconify-icon matMenuItemIcon icon="mdi:star-outline" width="18"></iconify-icon>
+          <span>Set as primary</span>
+        </button>
+      }
+      <button mat-menu-item>
+        <iconify-icon matMenuItemIcon icon="mdi:pencil" width="18"></iconify-icon>
+        <span>Edit details</span>
+      </button>
+      <button mat-menu-item class="remove-vehicle-btn" (click)="deleteVehicle()">
+        <iconify-icon
+          class="remove-vehicle-btn"
+          matMenuItemIcon
+          icon="mdi:delete"
+          width="18"
+        ></iconify-icon>
+        <span>Remove vehicle</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

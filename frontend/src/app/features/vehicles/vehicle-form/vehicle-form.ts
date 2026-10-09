@@ -14,6 +14,7 @@ import {
 } from '../vehicle-models';
 import { VehicleService } from '../vehicle-service';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -27,6 +28,7 @@ export class VehicleForm {
   private vehicleService = inject(VehicleService);
   private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private location = inject(Location);
 
   minYear = 1996;
   maxYear = new Date().getFullYear() + 1;
@@ -184,5 +186,15 @@ export class VehicleForm {
         this.toastr.error('Something went wrong. Could not save vehicle.', 'Vehicle');
       },
     });
+  }
+
+  goBack(): void {
+    const cameFromInsideApp = this.router.lastSuccessfulNavigation()?.previousNavigation;
+
+    if (cameFromInsideApp) {
+      this.location.back();
+    } else {
+      this.router.navigateByUrl('dashboard');
+    }
   }
 }
