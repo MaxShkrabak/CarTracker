@@ -101,38 +101,43 @@ public class DriveService {
     private void closeSession(DriveSession session, List<DriveSample> samples, Instant endedAt) {
         session.setEndedAt(endedAt);
 
-        Integer maxRPM = null;
-        Integer maxKPH = null;
-        Integer maxCoolant = null;
-        long rpmSum = 0, kphSum = 0;
+        Double maxRPM = null;
+        Double maxKPH = null;
+        Double maxCoolant = null;
+        double rpmSum = 0, kphSum = 0;
         int rpmCount = 0, kphCount = 0;
 
         for (DriveSample s : samples) {
+            Double value = s.getValue();
+            if (value == null) {
+                continue;
+            }
+
             // RPM
-            if (s.getRpm() != null) {
-                maxRPM = (maxRPM == null) ? s.getRpm() : Math.max(maxRPM, s.getRpm());
-                rpmSum += s.getRpm();
+            if ("rpm".equals(s.getSignal())) {
+                maxRPM = (maxRPM == null) ? value : Math.max(maxRPM, value);
+                rpmSum += value;
                 rpmCount++;
             }
 
             // KPH (Speed)
-            if (s.getKph() != null) {
-                maxKPH = (maxKPH == null) ? s.getKph() : Math.max(maxKPH, s.getKph());
-                kphSum += s.getKph();
+            if ("speed".equals(s.getSignal())) {
+                maxKPH = (maxKPH == null) ? value : Math.max(maxKPH, value);
+                kphSum += value;
                 kphCount++;
             }
 
             // Coolant Temp (C)
-            if (s.getCoolantTempC() != null) {
-                maxCoolant = (maxCoolant == null) ? s.getCoolantTempC() : Math.max(maxCoolant, s.getCoolantTempC());
+            if ("coolant".equals(s.getSignal())) {
+                maxCoolant = (maxCoolant == null) ? value : Math.max(maxCoolant, value);
             }
         }
 
-        session.setMaxRPM(maxRPM);
-        session.setMaxKPH(maxKPH);
-        session.setMaxCoolantTempC(maxCoolant);
-        session.setAvgRPM(rpmCount == 0 ? null : (double) rpmSum / rpmCount);
-        session.setAvgKPH(kphCount == 0 ? null : (double) kphSum / kphCount);
+        session.setMaxRPM(maxRPM == null ? null : (int) Math.round(maxRPM));
+        session.setMaxKPH(maxKPH == null ? null : (int) Math.round(maxKPH));
+        session.setMaxCoolantTempC(maxCoolant == null ? null : (int) Math.round(maxCoolant));
+        session.setAvgRPM(rpmCount == 0 ? null : rpmSum / rpmCount);
+        session.setAvgKPH(kphCount == 0 ? null : kphSum / kphCount);
         session.setSampleCount(samples.size());
     }
 }

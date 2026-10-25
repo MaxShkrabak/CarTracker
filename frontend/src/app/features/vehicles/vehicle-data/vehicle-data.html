@@ -1,6 +1,6 @@
 <div class="component-container">
   <h2 class="charts-title">Live Vehicle Data
-    @if (obd.status().startsWith('Connected to')) {
+    @if (obd.connected()) {
       <span>Live</span>
     } @else if (lastUsed()) {
       <span>Last used: {{ lastUsed() | date: 'MMM d, h:mm a' }}</span>

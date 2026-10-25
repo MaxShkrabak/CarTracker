@@ -28,7 +28,13 @@
     </div>
     <div class="stat">
       <span class="stat-label">Last drive</span>
-      <span class="stat-value">{{ lastUsed() }}</span>
+      <span class="stat-value">
+        @if (lastUsed(); as last) {
+          {{ last | date : 'MMM d, h:mm a' }}
+        } @else {
+          N/A
+        }
+      </span>
     </div>
   </div>
   <div class="list-card-vin">

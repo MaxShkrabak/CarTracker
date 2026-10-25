@@ -30,8 +30,7 @@ public class DriveSample {
 
     private Instant recordedAt;
 
-    private Integer rpm;
-    private Integer kph;
+    private String signal;
 
-    private Integer coolantTempC;
+    private Double value;
 }

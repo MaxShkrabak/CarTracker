@@ -1,3 +1,5 @@
+import { CanSignal } from './can-signals';
+
 function extractBytes(response: string, header: string, byteCount: number): number[] | null {
   const clean = response.replace(/\s/g, '');
   const found = clean.indexOf(header);
@@ -21,36 +23,6 @@ function extractBytes(response: string, header: string, byteCount: number): numb
   return bytes;
 }
 
-export function parseSpeed(response: string): number | null {
-  const bytes = extractBytes(response, '410D', 1);
-  if (bytes === null) {
-    return null;
-  }
-
-  const [a] = bytes;
-  return a;
-}
-
-export function parseRPM(response: string): number | null {
-  const bytes = extractBytes(response, '410C', 2);
-  if (bytes === null) {
-    return null;
-  }
-
-  const [a, b] = bytes;
-  return Math.round((256 * a + b) / 4);
-}
-
-export function parseCoolantTemp(response: string): number | null {
-  const bytes = extractBytes(response, '4105', 1);
-  if (bytes === null) {
-    return null;
-  }
-
-  const [a] = bytes;
-  return a - 40;
-}
-
 export function parseFuelLevel(response: string): number | null {
   const bytes = extractBytes(response, '412F', 1);
   if (bytes === null) {
@@ -69,4 +41,23 @@ export function parseBatteryVoltage(response: string): number | null {
   }
 
   return parseFloat(match[1]);
+}
+
+export function decodeCanSignal(signal: CanSignal, hex: string): number | null {
+  let raw = 0;
+
+  for (let i = 0; i < signal.bitLength; i++) {
+    const bit = signal.startBit + i;
+    const byteIndex = Math.floor(bit / 8);
+    const byte = parseInt(hex.slice(byteIndex * 2, byteIndex * 2 + 2), 16);
+
+    if (Number.isNaN(byte)) return null;
+
+    raw = raw * 2 + ((byte >> (7 - (bit % 8))) & 1);
+  }
+
+  if (signal.signed && raw >= 2 ** (signal.bitLength - 1)) {
+    raw -= 2 ** signal.bitLength;
+  }
+  return raw * signal.scale + signal.offset;
 }

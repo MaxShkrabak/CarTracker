@@ -14,10 +14,11 @@ import { Vehicle } from '../vehicle-models';
 import { DriveService } from '@features/obd/drive-service';
 import { AuthService } from '@core/auth-service';
 import { VehicleService } from '../vehicle-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-list-card',
-  imports: [MatMenuModule, MatButtonModule, MatIconModule],
+  imports: [MatMenuModule, MatButtonModule, MatIconModule, DatePipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './vehicle-list-card.html',
   styleUrl: './vehicle-list-card.css',
@@ -38,7 +39,7 @@ export class VehicleListCard {
 
   loadLastUsed(): void {
     this.driveService.getVehicleSessions(this.vehicle().vid).subscribe((sessions) => {
-      this.lastUsed.set(sessions.find((s) => s.endedAt !== null)?.endedAt ?? 'N/A');
+      this.lastUsed.set(sessions.find((s) => s.endedAt !== null)?.endedAt ?? null);
     });
   }
 

@@ -1,8 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { HighchartsChartDirective } from 'highcharts-angular';
 import { ObdConnection } from '@features/obd/obd-connection';
 import { DriveService } from '@features/obd/drive-service';
 import { DatePipe } from '@angular/common';
+import { AuthService } from '@core/auth-service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 const gaugeChart: Highcharts.ChartOptions = {
   type: 'gauge',
@@ -24,7 +26,7 @@ const gaugeAxis: Highcharts.YAxisOptions = {
   labels: { distance: 6, style: { fontSize: '9px' } },
 };
 
-function readout(unit: string, inline = false) {
+function readout(unit: string) {
   return {
     useHTML: true,
     borderWidth: 0,
@@ -39,23 +41,25 @@ function readout(unit: string, inline = false) {
 
 @Component({
   selector: 'app-vehicle-data',
-  imports: [HighchartsChartDirective, DatePipe ],
+  imports: [HighchartsChartDirective, DatePipe],
   templateUrl: './vehicle-data.html',
   styleUrl: './vehicle-data.css',
 })
 export class VehicleData {
   readonly obd = inject(ObdConnection);
   private readonly drive = inject(DriveService);
+  private readonly auth = inject(AuthService);
 
-  private readonly lastSessionEnd = signal<string | null>(null);
+  private readonly sessions = rxResource({
+    params: () => this.auth.currentUser()?.primaryVehicleId ?? undefined,
+    stream: ({ params: vid }) => this.drive.getVehicleSessions(vid),
+  });
+
+  private readonly lastSessionEnd = computed(
+    () => this.sessions.value()?.find((s) => s.endedAt !== null)?.endedAt ?? null,
+  );
+
   readonly lastUsed = computed(() => this.obd.lastDriveEnd() ?? this.lastSessionEnd());
-
-  // TODO: hardcoded (1) need to fix
-  constructor() {
-    this.drive.getVehicleSessions(1).subscribe((sessions) => {
-      this.lastSessionEnd.set(sessions.find((s) => s.endedAt !== null)?.endedAt ?? null);
-    })
-  }
 
   /* Speed Gauge */
   speedOptions = computed((): Highcharts.Options => ({

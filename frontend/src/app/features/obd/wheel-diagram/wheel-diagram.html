@@ -4,16 +4,24 @@
   </div>
 
   <div class="car">
-    <div class="tyre fl" [class]="state().fl" [style.transform]="'rotate(' + steerDeg() + 'deg)'"></div>
-    <div class="tyre fr" [class]="state().fr" [style.transform]="'rotate(' + steerDeg() + 'deg)'"></div>
-    <div class="tyre rl" [class]="state().rl"></div>
-    <div class="tyre rr" [class]="state().rr"></div>
+    <div
+      class="tire fl"
+      [class]="state().fl"
+      [style.transform]="'rotate(' + steerDeg() + 'deg)'"
+    ></div>
+    <div
+      class="tire fr"
+      [class]="state().fr"
+      [style.transform]="'rotate(' + steerDeg() + 'deg)'"
+    ></div>
+    <div class="tire bl" [class]="state().bl"></div>
+    <div class="tire br" [class]="state().br"></div>
 
     <img src="car-top.png" alt="Top-down view of car" />
 
     <div class="pct left front" [class]="state().fl"><small>FL</small>{{ fmt(diff().fl) }}</div>
     <div class="pct right front" [class]="state().fr"><small>FR</small>{{ fmt(diff().fr) }}</div>
-    <div class="pct left rear" [class]="state().rl"><small>RL</small>{{ fmt(diff().rl) }}</div>
-    <div class="pct right rear" [class]="state().rr"><small>RR</small>{{ fmt(diff().rr) }}</div>
+    <div class="pct left back" [class]="state().bl"><small>BL</small>{{ fmt(diff().bl) }}</div>
+    <div class="pct right back" [class]="state().br"><small>BR</small>{{ fmt(diff().br) }}</div>
   </div>
 </div>

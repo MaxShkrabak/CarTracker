@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-form',
-  imports: [RouterLink, MatSelectModule, MatFormFieldModule, FormsModule, MatInputModule],
+  imports: [MatSelectModule, MatFormFieldModule, FormsModule, MatInputModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './vehicle-form.html',
   styleUrl: './vehicle-form.css',

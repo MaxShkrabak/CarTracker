@@ -1,21 +1,16 @@
 <div class="component-container">
   <div class="obd-header">
-    <span class="status-circle" [class.active]="obd.status().startsWith('Connected to')"></span>
+    <span class="status-circle" [class.active]="obd.connected()"></span>
     <h2>Connect to OBD2</h2>
   </div>
   <p class="description">Connect your OBD2 adapter to start streaming real-time data.</p>
 
-  <!-- !!! TODO !!! fix connect(1) this is just assuming user HAS and only has 1 vehicle -->
   <button
     class="btn-primary"
     type="button"
-    (click)="obd.status().startsWith('Connected to') ? obd.disconnect() : obd.connect(1)" 
+    [disabled]="!obd.connected() && vehicleId() === null"
+    (click)="toggle()"
   >
-    {{ obd.status().startsWith('Connected to') ? 'Disconnect OBD2' : 'Connect OBD2' }}
+    {{ obd.connected() ? 'Disconnect OBD2' : 'Connect OBD2' }}
   </button>
-
-  <!-- Testing stuff -->
-  <button class="btn-primary" type="button" (click)="obd.write('ATZ')">Send type request</button>
-  <button class="btn-primary" type="button" (click)="obd.write('010C')">Send RPM request</button>
-  <span>Data received: {{ obd.lastResponse() }}</span>
 </div>
