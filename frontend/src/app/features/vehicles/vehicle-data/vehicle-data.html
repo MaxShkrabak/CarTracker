@@ -1,20 +1,29 @@
-<div class="component-container">
+<div class="component-container live-card">
   <h2 class="charts-title">Live Vehicle Data
     @if (obd.connected()) {
-      <span>Live</span>
+      <span class="status">Live</span>
     } @else if (lastUsed()) {
-      <span>Last used: {{ lastUsed() | date: 'MMM d, h:mm a' }}</span>
+      <span class="status">Last used: {{ lastUsed() | date: 'MMM d, h:mm a' }}</span>
     } @else {
-      <span>Connect OBD2 to use</span>
+      <span class="status">Connect OBD2 to use</span>
     }
   </h2>
 
-  <div class="charts-grid">
-    <div class="metric-card">
-      <div class="metric-header"><span>Speed</span></div>
-      <div highchartsChart [options]="speedOptions()" class="chart"></div>
+  <div class="live-body">
+  <div class="metric-card speed-panel">
+    <div class="metric-header"><span>Speed</span></div>
+    <div class="speed-readout">
+      <span class="speed-value">{{ obd.speed() }}</span>
+      <span class="speed-unit">mph</span>
     </div>
+  </div>
 
+  <div class="metric-card wheel-panel">
+    <div class="metric-header"><span>Wheel Speeds</span></div>
+    <app-wheel-diagram />
+  </div>
+
+  <div class="charts-grid">
     <div class="metric-card">
       <div class="metric-header"><span>RPM</span></div>
       <div highchartsChart [options]="rpmOptions()" class="chart"></div>
@@ -34,5 +43,6 @@
       <div class="metric-header"><span>Battery Voltage</span></div>
       <div highchartsChart [options]="batteryOptions()" class="chart"></div>
     </div>
+  </div>
   </div>
 </div>

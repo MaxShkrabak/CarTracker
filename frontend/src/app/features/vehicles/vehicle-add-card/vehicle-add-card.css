@@ -19,13 +19,6 @@
     overflow-wrap: break-word;
 }
 
-.component-container {
-  height: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
 .btn-primary {
   margin-top: auto;
 }

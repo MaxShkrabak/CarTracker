@@ -2,13 +2,14 @@
     margin: 1rem;
     display: grid;
     grid-template-columns: minmax(240px, 20%) minmax(0, 1fr);
-
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
-app-vehicle-card,
-app-vehicle-data,
-app-wheel-diagram {
+.dashboard > * {
+  display: block;
+}
+
+app-vehicle-data {
   grid-column: 1 / -1;
 }
 

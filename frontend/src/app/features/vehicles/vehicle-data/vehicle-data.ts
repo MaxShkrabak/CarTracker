@@ -5,43 +5,88 @@ import { DriveService } from '@features/obd/drive-service';
 import { DatePipe } from '@angular/common';
 import { AuthService } from '@core/auth-service';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { WheelDiagram } from '@features/obd/wheel-diagram/wheel-diagram';
 
-const gaugeChart: Highcharts.ChartOptions = {
-  type: 'gauge',
-  height: '100%',
-  spacing: [0, 0, 2, 0],
-};
+const GREEN = '#55a151';
+const AMBER = '#d4a13a';
+const RED = '#b84040';
 
-const gaugePane: Highcharts.PaneOptions = {
-  startAngle: -120,
-  endAngle: 120,
-  center: ['50%', '50%'],
-  size: '92%',
-  background: null,
-};
+type Band = [from: number, to: number, color: string];
 
-const gaugeAxis: Highcharts.YAxisOptions = {
-  tickLength: 0,
-  tickWidth: 0,
-  labels: { distance: 6, style: { fontSize: '9px' } },
-};
+function gaugeOptions(
+  value: number,
+  min: number,
+  max: number,
+  unit: string,
+  decimals: number,
+  bands: Band[],
+): Highcharts.Options {
+  const gap = (max - min) * 0.01;
 
-function readout(unit: string) {
   return {
-    useHTML: true,
-    borderWidth: 0,
-    y: 15,
-    format:
-      '<div style="text-align:center;line-height:1.15">' +
-      '<div style="font-size:20px;font-weight:700">{y}</div>' +
-      `<div style="font-size:9px">${unit}</div>` +
-      '</div>',
+    chart: { type: 'solidgauge', height: 150, spacing: [0, 0, 0, 0] },
+    title: { text: undefined },
+    credits: { enabled: false },
+    tooltip: { enabled: false },
+    pane: {
+      startAngle: -120,
+      endAngle: 120,
+      center: ['50%', '54%'],
+      size: '100%',
+      background: [
+        {
+          innerRadius: '70%',
+          outerRadius: '86%',
+          backgroundColor: 'rgba(0, 0, 0, 0.22)',
+          borderWidth: 0,
+          shape: 'arc',
+        },
+      ],
+    },
+    yAxis: {
+      min,
+      max,
+      lineWidth: 0,
+      tickPositions: [],
+      minorTickWidth: 0,
+      labels: { enabled: false },
+      plotBands: bands.map(([from, to, color], i) => ({
+        from: i === 0 ? from : from + gap / 2,
+        to: i === bands.length - 1 ? to : to - gap / 2,
+        color,
+        innerRadius: '92%',
+        outerRadius: '97%',
+      })),
+    },
+    plotOptions: {
+      solidgauge: {
+        innerRadius: '70%',
+        radius: '86%',
+        threshold: min,
+        dataLabels: {
+          y: 4,
+          borderWidth: 0,
+          useHTML: false,
+          formatter: function () {
+            const v = (this.y ?? 0).toLocaleString('en-US', {
+              minimumFractionDigits: decimals,
+              maximumFractionDigits: decimals,
+            });
+            return (
+              `<span style="font-size:24px;font-weight:700">${v}</span>` +
+              `<span style="font-size:11px;fill:#b0b0bb"> ${unit}</span>`
+            );
+          },
+        },
+      },
+    },
+    series: [{ type: 'solidgauge', name: unit, data: [{ y: value, color: '#e2e1eb' }] }],
   };
 }
 
 @Component({
   selector: 'app-vehicle-data',
-  imports: [HighchartsChartDirective, DatePipe],
+  imports: [HighchartsChartDirective, DatePipe, WheelDiagram],
   templateUrl: './vehicle-data.html',
   styleUrl: './vehicle-data.css',
 })
@@ -61,143 +106,42 @@ export class VehicleData {
 
   readonly lastUsed = computed(() => this.obd.lastDriveEnd() ?? this.lastSessionEnd());
 
-  /* Speed Gauge */
-  speedOptions = computed((): Highcharts.Options => ({
-    chart: gaugeChart,
-    title: { text: undefined },
-    credits: { enabled: false },
-    pane: gaugePane,
-    yAxis: {
-      ...gaugeAxis,
-      min: 0,
-      max: 220,
-      tickPositions: [0, 220],
-      plotBands: [
-        { from: 0, to: 69.5, color: '#00A96B' },
-        { from: 70.5, to: 109.5, color: '#FFBF00' },
-        { from: 110.5, to: 220, color: '#a90025' },
-      ],
-    },
-    series: [
-      {
-        type: 'gauge',
-        name: 'Speed',
-        data: [this.obd.speed()],
-        dataLabels: readout('MPH'),
-      },
-    ],
-  }));
-
   /* RPM */
-  rpmOptions = computed((): Highcharts.Options => ({
-    chart: gaugeChart,
-    title: { text: undefined },
-    credits: { enabled: false },
-    pane: gaugePane,
-    yAxis: {
-      ...gaugeAxis,
-      min: 0,
-      max: 8000,
-      tickPositions: [0, 8000],
-      plotBands: [
-        { from: 0, to: 5975, color: '#00A96B' },
-        { from: 6025, to: 6975, color: '#FFBF00' },
-        { from: 7025, to: 8000, color: '#a90025' },
-      ],
-    },
-    series: [
-      {
-        type: 'gauge',
-        name: 'RPM',
-        data: [this.obd.rpm()],
-        dataLabels: readout('RPM'),
-      },
-    ],
-  }));
+  rpmOptions = computed(() =>
+    gaugeOptions(this.obd.rpm(), 0, 8000, 'rpm', 0, [
+      [0, 5500, GREEN],
+      [5500, 6500, AMBER],
+      [6500, 8000, RED],
+    ]),
+  );
 
   /* Coolant Temp */
-  coolantOptions = computed((): Highcharts.Options => ({
-    chart: gaugeChart,
-    title: { text: undefined },
-    credits: { enabled: false },
-    pane: gaugePane,
-    yAxis: {
-      ...gaugeAxis,
-      min: 100,
-      max: 260,
-      tickPositions: [100, 260],
-      plotBands: [
-        { from: 0, to: 159.5, color: '#0074a9' },
-        { from: 160.5, to: 229.5, color: '#00A96B' },
-        { from: 230.5, to: 260, color: '#a90025' },
-      ],
-    },
-    series: [
-      {
-        type: 'gauge',
-        name: 'temp',
-        data: [this.obd.coolantTemp()],
-        dataLabels: readout('\u00B0F'),
-      },
-    ],
-  }));
+  coolantOptions = computed(() =>
+    gaugeOptions(this.obd.coolantTemp(), 100, 260, '°F', 0, [
+      [100, 160, AMBER],
+      [160, 220, GREEN],
+      [220, 235, AMBER],
+      [235, 260, RED],
+    ]),
+  );
 
   /* Fuel Level */
-  fuelOptions = computed((): Highcharts.Options => ({
-    chart: gaugeChart,
-    title: { text: undefined },
-    credits: { enabled: false },
-    pane: gaugePane,
-    yAxis: {
-      ...gaugeAxis,
-      min: 0,
-      max: 100,
-      tickPositions: [0, 100],
-      minorTickWidth: 0,
-      labels: {
-        distance: 6,
-        style: { fontSize: '9px' },
-        formatter: (ctx) => (ctx.value === 0 ? 'E' : ctx.value === 100 ? 'F' : ''),
-      },
-      plotBands: [
-        { from: 0, to: this.obd.fuelLevel(), color: '#b0cf26' },
-        { from: this.obd.fuelLevel(), to: 100, color: '#464543' },
-      ],
-    },
-    series: [
-      {
-        type: 'gauge',
-        name: 'Fuel',
-        data: [this.obd.fuelLevel()],
-        dataLabels: readout('%'),
-      },
-    ],
-  }));
+  fuelOptions = computed(() =>
+    gaugeOptions(this.obd.fuelLevel(), 0, 100, '%', 0, [
+      [0, 12, RED],
+      [12, 25, AMBER],
+      [25, 100, GREEN],
+    ]),
+  );
 
   /* Battery Voltage */
-  batteryOptions = computed((): Highcharts.Options => ({
-    chart: gaugeChart,
-    title: { text: undefined },
-    credits: { enabled: false },
-    pane: gaugePane,
-    yAxis: {
-      ...gaugeAxis,
-      min: 10,
-      max: 16,
-      tickPositions: [10, 16],
-      minorTickWidth: 0,
-      plotBands: [
-        { from: 10, to: this.obd.voltage(), color: '#00A96B' },
-        { from: this.obd.voltage(), to: 16, color: '#464543' },
-      ],
-    },
-    series: [
-      {
-        type: 'gauge',
-        name: 'Battery Voltage',
-        data: [this.obd.voltage()],
-        dataLabels: readout('V'),
-      },
-    ],
-  }));
+  batteryOptions = computed(() =>
+    gaugeOptions(this.obd.voltage(), 10, 16, 'V', 1, [
+      [10, 11.8, RED],
+      [11.8, 12.4, AMBER],
+      [12.4, 14.8, GREEN],
+      [14.8, 15.2, AMBER],
+      [15.2, 16, RED],
+    ]),
+  );
 }

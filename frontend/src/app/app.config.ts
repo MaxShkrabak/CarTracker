@@ -58,7 +58,7 @@ export const appConfig: ApplicationConfig = {
           series: { dataLabels: { style: { color: 'var(--color-text)', textOutline: 'none' } } },
         },
       },
-      modules: () => [import('highcharts/esm/highcharts-more')],
+      modules: () => [import('highcharts/esm/highcharts-more').then(() => import('highcharts/esm/modules/solid-gauge')),],
     }),
   ],
 };

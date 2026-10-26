@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DriveSession, DriveSampleRequest } from './drive-models';
+import { DriveSession, DriveSampleRequest, VehicleStats } from './drive-models';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +26,8 @@ export class DriveService {
     getVehicleSessions(vid: number): Observable<DriveSession[]> {
         return this.http.get<DriveSession[]>(`${this.apiUrl}/vehicle/${vid}/sessions`, { withCredentials: true});
     }
-  
+    
+    getVehicleStats(vid: number): Observable<VehicleStats> {
+    return this.http.get<VehicleStats>(`${this.apiUrl}/vehicle/${vid}/stats`, { withCredentials: true });
+  }
 }

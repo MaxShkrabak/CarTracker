@@ -1,9 +1,4 @@
-<div class="component-container wheel-card">
-  <div class="card-heading">
-    <h2>Wheel Speeds</h2>
-  </div>
-
-  <div class="car">
+<div class="car">
     <div
       class="tire fl"
       [class]="state().fl"
@@ -24,4 +19,3 @@
     <div class="pct left back" [class]="state().bl"><small>BL</small>{{ fmt(diff().bl) }}</div>
     <div class="pct right back" [class]="state().br"><small>BR</small>{{ fmt(diff().br) }}</div>
   </div>
-</div>

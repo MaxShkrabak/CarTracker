@@ -18,6 +18,7 @@ import com.maxshkrabak.cartracker.model.dto.DriveSampleDTO;
 import com.maxshkrabak.cartracker.model.dto.DriveSampleRequest;
 import com.maxshkrabak.cartracker.model.dto.DriveSessionDTO;
 import com.maxshkrabak.cartracker.model.dto.DriveSessionRequest;
+import com.maxshkrabak.cartracker.model.dto.VehicleStatsDTO;
 import com.maxshkrabak.cartracker.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.service.DriveService;
 
@@ -74,4 +75,9 @@ public class DriveController {
                 .body(driveService.endSession(sessionId, principal.getUid(), request));
     }
 
+    // get max stats
+    @GetMapping("/vehicle/{vid}/stats")
+    public VehicleStatsDTO getVehicleStats(@PathVariable Long vid, @AuthenticationPrincipal CustomUserDetails principal) {
+        return driveService.getVehicleStats(vid, principal.getUid());
+    }
 }

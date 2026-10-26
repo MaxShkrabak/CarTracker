@@ -20,4 +20,10 @@ public interface DriveSessionRepository extends JpaRepository<DriveSession, Long
     List<DriveSession> findUsersVehicleDriveSessions(@Param("vid") Long vid, @Param("uid") Long uid);
 
     Optional<DriveSession> findByVehicle_VidAndEndedAtIsNull(Long vid);
+
+    Optional<DriveSession> findFirstByVehicle_VidAndVehicle_User_UidAndMaxKPHNotNullOrderByMaxKPHDesc(Long vid, Long uid);
+
+    Optional<DriveSession> findFirstByVehicle_VidAndVehicle_User_UidAndMaxRPMNotNullOrderByMaxRPMDesc(Long vid, Long uid);
+
+    Optional<DriveSession> findFirstByVehicle_VidAndVehicle_User_UidAndMaxCoolantTempCNotNullOrderByMaxCoolantTempCDesc(Long vid, Long uid);
 }

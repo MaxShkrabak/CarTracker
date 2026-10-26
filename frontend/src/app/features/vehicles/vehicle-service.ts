@@ -44,4 +44,5 @@ export class VehicleService {
   deleteVehicle(vid: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${vid}`, { withCredentials: true });
   }
+
 }

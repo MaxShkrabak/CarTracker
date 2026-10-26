@@ -17,3 +17,15 @@ export interface DriveSession {
   maxCoolantTempC: number | null;
   sampleCount: number | null;
 }
+
+export interface StatRecord {
+  value: number;
+  sessionId: number;
+  StartedAt: string;
+}
+
+export interface VehicleStats {
+  maxSpeed: StatRecord | null;
+  maxRpm: StatRecord | null;
+  maxCoolant: StatRecord | null;
+}

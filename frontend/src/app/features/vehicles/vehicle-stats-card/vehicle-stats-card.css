@@ -1,0 +1,22 @@
+.stat-list {
+    border: 1px solid var(--color-surface);
+    border-radius: var(--radius-md);
+}
+
+.stat-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+}
+
+.stat-value {
+    font-weight: 600;
+}
+
+.stat-metric:not(:last-child) {
+    border-bottom: 1px solid var(--color-surface);
+}

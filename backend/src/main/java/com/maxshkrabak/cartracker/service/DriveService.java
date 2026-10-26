@@ -13,6 +13,7 @@ import com.maxshkrabak.cartracker.model.dto.DriveSampleDTO;
 import com.maxshkrabak.cartracker.model.dto.DriveSampleRequest;
 import com.maxshkrabak.cartracker.model.dto.DriveSessionDTO;
 import com.maxshkrabak.cartracker.model.dto.DriveSessionRequest;
+import com.maxshkrabak.cartracker.model.dto.VehicleStatsDTO;
 import com.maxshkrabak.cartracker.model.entity.DriveSample;
 import com.maxshkrabak.cartracker.model.entity.DriveSession;
 import com.maxshkrabak.cartracker.model.entity.Vehicle;
@@ -139,5 +140,16 @@ public class DriveService {
         session.setAvgRPM(rpmCount == 0 ? null : rpmSum / rpmCount);
         session.setAvgKPH(kphCount == 0 ? null : kphSum / kphCount);
         session.setSampleCount(samples.size());
+    }
+
+    public VehicleStatsDTO getVehicleStats(Long vid, Long uid) {
+        return new VehicleStatsDTO(
+            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxKPHNotNullOrderByMaxKPHDesc(vid, uid)
+            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxKPH(), s.getSessionId(), s.getStartedAt())).orElse(null),
+            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxRPMNotNullOrderByMaxRPMDesc(vid, uid)
+            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxRPM(), s.getSessionId(), s.getStartedAt())).orElse(null),
+            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxCoolantTempCNotNullOrderByMaxCoolantTempCDesc(vid, uid)
+            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxCoolantTempC(), s.getSessionId(), s.getStartedAt())).orElse(null)
+        );
     }
 }

@@ -1,0 +1,21 @@
+<div class="component-container">
+  <h2>Metrics</h2>
+  <div class="stat-list">
+    <div class="stat-metric">
+      <span class="stat-label">Odometer</span>
+      <span class="stat-value">{{ vehicle.value()?.mileage ?? '-' }} mi</span>
+    </div>
+    <div class="stat-metric">
+      <span class="stat-label">Max Speed</span>
+      <span class="stat-value">{{ maxSpeedMph() ?? '-' }} mph</span>
+    </div>
+    <div class="stat-metric">
+      <span class="stat-label">Max RPM</span>
+      <span class="stat-value">{{ stats.value()?.maxRpm?.value ?? '-' }} rpm</span>
+    </div>
+    <div class="stat-metric">
+      <span class="stat-label">Max Coolant Temp</span>
+      <span class="stat-value">{{ maxCoolantF() ?? '-' }} &deg;F</span>
+    </div>
+  </div>
+</div>
