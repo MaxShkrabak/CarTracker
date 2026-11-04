@@ -31,6 +31,12 @@ export class VehicleService {
       .pipe(switchMap((saved) => this.auth.me().pipe(map(() => saved))));
   }
 
+  updateVehicle(vehicle: Vehicle): Observable<Vehicle> {
+    return this.http.patch<Vehicle>(`${this.apiUrl}/${vehicle.vid}`, vehicle, {
+      withCredentials: true,
+    });
+  }
+
   setPrimary(vid: number): Observable<User> {
     return this.http
       .put<User>(`${this.apiUrl}/${vid}/primary`, null, { withCredentials: true })
@@ -45,4 +51,9 @@ export class VehicleService {
     return this.http.delete<void>(`${this.apiUrl}/${vid}`, { withCredentials: true });
   }
 
+  uploadImage(vid: number, file: File): Observable<void> {
+    const form = new FormData();
+    form.append('image', file);
+    return this.http.post<void>(`${this.apiUrl}/${vid}/image`, form, { withCredentials: true });
+  }
 }

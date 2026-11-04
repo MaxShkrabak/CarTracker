@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/auth-service';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,6 @@ import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 export class Login {
   username = '';
   password = '';
-  errorMessage = signal('');
   loading = signal(false);
   hidePassword = signal(true);
 
@@ -23,6 +23,7 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private toastr: ToastrService,
   ) {}
 
   onLogin() {
@@ -33,13 +34,15 @@ export class Login {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMessage.set(
-          err.status === 0 ? 'Cannot reach the server.' : 'Incorrect username or password.');
+        this.toastr.error(
+          err.status === 0 ? 'Cannot reach the server.' : 'Incorrect username or password.',
+          'Login',
+        );
       },
     });
   }
 
   togglePasswordVisibility(): void {
-    this.hidePassword.update(v => !v);
+    this.hidePassword.update((v) => !v);
   }
 }

@@ -30,7 +30,7 @@
       <span class="stat-label">Last drive</span>
       <span class="stat-value">
         @if (lastUsed(); as last) {
-          {{ last | date : 'MMM d, h:mm a' }}
+          {{ last | date: 'MMM d, h:mm a' }}
         } @else {
           N/A
         }
@@ -52,9 +52,6 @@
     }
 
     <div class="footer-right-options">
-      <!-- Open vehicle details-->
-      <button class="open-vehicle-btn">Open</button>
-
       <!-- Burger Menu -->
       <button
         matIconButton
@@ -68,11 +65,16 @@
     <mat-menu #vehicleMenu="matMenu" xPosition="before">
       @if (!isPrimary()) {
         <button mat-menu-item (click)="setPrimary()">
-          <iconify-icon noobserver matMenuItemIcon icon="mdi:star-outline" width="18"></iconify-icon>
+          <iconify-icon
+            noobserver
+            matMenuItemIcon
+            icon="mdi:star-outline"
+            width="18"
+          ></iconify-icon>
           <span>Set as primary</span>
         </button>
       }
-      <button mat-menu-item>
+      <button mat-menu-item [routerLink]="['/vehicles', vehicle().vid, 'edit']">
         <iconify-icon noobserver matMenuItemIcon icon="mdi:pencil" width="18"></iconify-icon>
         <span>Edit details</span>
       </button>

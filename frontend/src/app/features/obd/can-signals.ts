@@ -52,3 +52,11 @@ export const CAN_GROUPS: CanGroup[] = [
   { name: 'coolant', filter: '324', mask: '7FF', ids: ['324'], intervalMs: 10000 },
   { name: 'wheel', filter: '1B0', mask: '79F', ids: ['1B0', '1D0'], intervalMs: 1000 },
 ];
+
+export const TRIP_GROUP: CanGroup = {
+  name: 'trip',
+  filter: '377',
+  mask: '7FF',
+  ids: ['377'],
+  intervalMs: 0,
+};

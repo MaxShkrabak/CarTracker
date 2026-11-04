@@ -20,7 +20,9 @@ export class AuthService {
   http = inject(HttpClient);
 
   me(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`, {withCredentials: true}).pipe(tap((user) => this.currentUser.set(user)));
+    return this.http
+      .get<User>(`${this.apiUrl}/me`, { withCredentials: true })
+      .pipe(tap((user) => this.currentUser.set(user)));
   }
 
   login(credentials: LoginRequest): Observable<User> {
@@ -43,5 +45,11 @@ export class AuthService {
 
   resetPassword(request: ResetPasswordRequest): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/reset-password`, request);
+  }
+
+  logout(): Observable<void> {
+    return this.http
+      .post<void>(`${this.apiUrl}/logout`, null, { withCredentials: true })
+      .pipe(tap(() => this.currentUser.set(null)));
   }
 }

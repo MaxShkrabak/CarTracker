@@ -1,8 +1,10 @@
 package com.maxshkrabak.cartracker.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,13 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.maxshkrabak.cartracker.model.dto.UserDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleDTO;
 import com.maxshkrabak.cartracker.model.dto.VehicleRequest;
 import com.maxshkrabak.cartracker.model.dto.VehicleUpdateRequest;
 import com.maxshkrabak.cartracker.model.dto.VinDecodeResponse;
+import com.maxshkrabak.cartracker.model.entity.VehicleImage;
 import com.maxshkrabak.cartracker.security.CustomUserDetails;
 import com.maxshkrabak.cartracker.service.VehicleService;
 import com.maxshkrabak.cartracker.service.VinDecodeService;
@@ -38,7 +43,7 @@ public class VehicleController {
     public List<VehicleDTO> getVehicles(@AuthenticationPrincipal CustomUserDetails principal) {
         return service.getVehicles(principal.getUid());
     }
-    
+
     @PostMapping("/add")
     public ResponseEntity<VehicleDTO> addVehicle(@RequestBody VehicleRequest vehicleRequest,
             @AuthenticationPrincipal CustomUserDetails principal) {
@@ -65,8 +70,25 @@ public class VehicleController {
     }
 
     @PutMapping("/{vid}/primary")
-    public ResponseEntity<UserDTO> setPrimary(@PathVariable Long vid, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<UserDTO> setPrimary(@PathVariable Long vid,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.ok(service.setPrimary(vid, principal.getUid()));
+    }
+
+    @PostMapping("/{vid}/image")
+    public ResponseEntity<Void> uploadImage(@PathVariable Long vid, @RequestParam("image") MultipartFile image,
+            @AuthenticationPrincipal CustomUserDetails principal) throws IOException {
+        service.saveImage(vid, principal.getUid(), image);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{vid}/image")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long vid,
+            @AuthenticationPrincipal CustomUserDetails principal) {
+        VehicleImage image = service.getImage(vid, principal.getUid());
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.parseMediaType(image.getContentType()))
+                .body(image.getData());
     }
 
     @GetMapping("/decode/{vin}")
@@ -75,8 +97,8 @@ public class VehicleController {
     }
 
     @PatchMapping("/decode/{vin}")
-    public ResponseEntity<VehicleDTO> decodeAndUpdateVehicle(@PathVariable String vin, @AuthenticationPrincipal CustomUserDetails principal) {
+    public ResponseEntity<VehicleDTO> decodeAndUpdateVehicle(@PathVariable String vin,
+            @AuthenticationPrincipal CustomUserDetails principal) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateVehicleFromDecode(vin, principal.getUid()));
     }
-
 }

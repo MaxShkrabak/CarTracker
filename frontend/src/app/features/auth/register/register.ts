@@ -46,7 +46,7 @@ export class Register {
     this.shakeRules = false;
     this.shakeInvalid = false;
 
-    if (form.invalid) {
+    if (form.invalid || !this.fullName.trim()) {
       form.form.markAllAsTouched();
       this.shakeInvalid = true;
       this.errorMessage.set('Please make sure all required fields are filled out correctly.');
@@ -68,9 +68,9 @@ export class Register {
     }
 
     this.loading.set(true);
-    const [firstName, lastName = ''] = this.fullName.split(/\s+/);
-
-    // TODO: Need input field verification
+    const names = this.fullName.trim().split(/\s+/);
+    const firstName = names[0];
+    const lastName = names.slice(1).join(' ');
 
     this.authService
       .register({
@@ -99,6 +99,6 @@ export class Register {
   }
 
   togglePasswordVisibility(): void {
-    this.hidePassword.update(v => !v);
+    this.hidePassword.update((v) => !v);
   }
 }

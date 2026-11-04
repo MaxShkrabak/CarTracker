@@ -58,6 +58,7 @@ public class DriveService {
 
         DriveSession session = new DriveSession();
         session.setVehicle(vehicle);
+        updateMileage(vehicle, request.tripMeter());
         session.setStartedAt(request.startedAt() != null ? request.startedAt() : Instant.now());
 
         return driveMapper.toDto(sessionRepo.save(session));
@@ -144,12 +145,36 @@ public class DriveService {
 
     public VehicleStatsDTO getVehicleStats(Long vid, Long uid) {
         return new VehicleStatsDTO(
-            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxKPHNotNullOrderByMaxKPHDesc(vid, uid)
-            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxKPH(), s.getSessionId(), s.getStartedAt())).orElse(null),
-            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxRPMNotNullOrderByMaxRPMDesc(vid, uid)
-            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxRPM(), s.getSessionId(), s.getStartedAt())).orElse(null),
-            sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxCoolantTempCNotNullOrderByMaxCoolantTempCDesc(vid, uid)
-            .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxCoolantTempC(), s.getSessionId(), s.getStartedAt())).orElse(null)
-        );
+                sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxKPHNotNullOrderByMaxKPHDesc(vid, uid)
+                        .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxKPH(), s.getSessionId(), s.getStartedAt()))
+                        .orElse(null),
+                sessionRepo.findFirstByVehicle_VidAndVehicle_User_UidAndMaxRPMNotNullOrderByMaxRPMDesc(vid, uid)
+                        .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxRPM(), s.getSessionId(), s.getStartedAt()))
+                        .orElse(null),
+                sessionRepo
+                        .findFirstByVehicle_VidAndVehicle_User_UidAndMaxCoolantTempCNotNullOrderByMaxCoolantTempCDesc(
+                                vid, uid)
+                        .map(s -> new VehicleStatsDTO.StatRecord(s.getMaxCoolantTempC(), s.getSessionId(),
+                                s.getStartedAt()))
+                        .orElse(null));
+    }
+
+    private void updateMileage(Vehicle vehicle, Integer trip) {
+        if (trip == null)
+            return;
+
+        Integer lastTrip = vehicle.getLastTripMeter();
+
+        if (lastTrip == null) {
+            vehicle.setLastTripMeter(trip);
+            return;
+        }
+
+        if (trip < lastTrip && lastTrip - trip < 10)
+            return;
+
+        int driven = trip >= lastTrip ? trip - lastTrip : trip;
+        vehicle.setMileage(vehicle.getMileage() + driven / 10);
+        vehicle.setLastTripMeter(trip - driven % 10);
     }
 }

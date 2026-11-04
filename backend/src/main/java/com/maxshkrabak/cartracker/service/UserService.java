@@ -77,9 +77,7 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.username().trim().toLowerCase(Locale.ROOT),
-                        loginRequest.password()
-                )
-        );
+                        loginRequest.password()));
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
@@ -90,7 +88,6 @@ public class UserService {
         return userMapper.toDto(userRepo.findById(principal.getUid()).orElseThrow());
     }
 
-    // TODO: needs updating
     public User changePassword(Long id, PasswordChangeRequest changeRequest) {
         User user = userRepo.findById(id).orElseThrow(() -> new UserAccountDoesNotExist(id));
 
@@ -101,5 +98,4 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(changeRequest.newPassword()));
         return userRepo.save(user);
     }
-
 }

@@ -1,9 +1,13 @@
-<h1 class="greeting">Welcome back, {{ firstName() }}!</h1>
+<div class="dashboard-header">
+  <h1 class="greeting">Welcome back, {{ firstName() }}!</h1>
+  <button type="button" class="btn-secondary logout" (click)="logout()">Logout</button>
+</div>
 
 <div class="dashboard">
-    <app-vehicle-add-card/>
-    <app-obd-widget/>
-    <app-vehicle-stats-card/>
-    <app-vehicle-card/>
-    <app-vehicle-data/>
+  <app-vehicle-add-card />
+  <app-obd-widget />
+  <app-vehicle-stats-card />
+  <app-vehicle-card />
+  <app-vehicle-data />
+  <app-vehicle-samples-chart />
 </div>

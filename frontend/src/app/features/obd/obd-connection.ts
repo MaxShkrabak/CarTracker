@@ -1,11 +1,16 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { decodeCanSignal, parseBatteryVoltage, parseFuelLevel } from './obd-parser';
+import {
+  decodeCanSignal,
+  decodeTripMeter,
+  parseBatteryVoltage,
+  parseFuelLevel,
+} from './obd-parser';
 import { DriveService } from './drive-service';
 import { DriveSampleRequest } from './drive-models';
 import { firstValueFrom } from 'rxjs';
 import { Wheel, WheelSpeeds } from './wheel-diagram/wheel-diagram';
-import { CAN_SIGNALS, CAN_GROUPS, CanGroup } from './can-signals';
+import { CAN_SIGNALS, CAN_GROUPS, CanGroup, TRIP_GROUP } from './can-signals';
 
 // useful: https://afshari.lu/post/213-elm/
 const VGATE_SERVICE = 'e7810a71-73ae-499d-8c15-faa9aef0c3f2'; // service id of ELM327 OBD2 BLE
@@ -17,6 +22,8 @@ const CAN_STOP_TIMEOUT_MS = 1000;
 const WRITE_TIMEOUT_MS = 5000; // wait for adapter to answer a command
 const FLUSH_EVERY_MS = 5000; // how often samples are sent to backend
 const VOLTAGE_EVERY_MS = 30000;
+const FUEL_ATTEMPTS = 3;
+const FUEL_RETRY_MS = 1000;
 
 @Injectable({ providedIn: 'root' })
 export class ObdConnection {
@@ -62,6 +69,8 @@ export class ObdConnection {
   readonly fuelLevel = signal(0);
   readonly voltage = signal(10);
 
+  private tripFrame: string | null = null;
+
   async connect(vid: number): Promise<void> {
     if (this.status() !== 'Not connected') return;
 
@@ -91,17 +100,18 @@ export class ObdConnection {
 
       await this.write('ATZ'); // reset device
       await this.write('ATE0');
-      await this.write('ATSP0');
+      await this.write('ATSP6');
 
       // fuel is read once
       const fuel = await this.readFuel();
 
-      await this.write('ATSP6');
       await this.write('ATH1');
       await this.write('ATS0');
       await this.write('ATCAF0');
 
-      const session = await firstValueFrom(this.drive.startSession(vid));
+      const tripMeter = await this.readTripMeter();
+
+      const session = await firstValueFrom(this.drive.startSession(vid, tripMeter));
       this.sessionId = session.sessionId;
       this.sampleBuffer = [];
       this.lastFlush = Date.now();
@@ -285,6 +295,10 @@ export class ObdConnection {
     const id = line.slice(0, CAN_ID_LENGTH);
     const hex = line.slice(CAN_ID_LENGTH);
 
+    if (id === TRIP_GROUP.filter) {
+      this.tripFrame = hex;
+    }
+
     for (const canSignal of CAN_SIGNALS) {
       if (canSignal.id !== id) continue;
 
@@ -345,21 +359,26 @@ export class ObdConnection {
   }
 
   private async readFuel(): Promise<number | null> {
-    try {
-      const reply = await this.write('012F');
-      const fuel = parseFuelLevel(reply);
+    for (let attempt = 1; attempt <= FUEL_ATTEMPTS; attempt++) {
+      try {
+        const reply = await this.write('012F');
+        const fuel = parseFuelLevel(reply);
 
-      if (fuel === null) {
-        console.warn('No fuel level in reply', JSON.stringify(reply));
-        return null;
+        if (fuel !== null) {
+          this.fuelLevel.set(fuel);
+          return fuel;
+        }
+
+        console.warn(`No fuel level in reply (attempt ${attempt})`, JSON.stringify(reply));
+      } catch (e) {
+        console.warn(`Failed to read fuel level (attempt ${attempt})`, e);
       }
 
-      this.fuelLevel.set(fuel);
-      return fuel;
-    } catch (e) {
-      console.warn('Failed to read fuel level', e);
-      return null;
+      // give the ECU time to wake up and let any late reply drain before retrying
+      await new Promise((resolve) => setTimeout(resolve, FUEL_RETRY_MS));
     }
+
+    return null;
   }
 
   private async flushSamples(sessionId: number | null): Promise<void> {
@@ -391,5 +410,13 @@ export class ObdConnection {
     } catch (e) {
       console.warn('Failed to end drive session', e);
     }
+  }
+
+  private async readTripMeter(): Promise<number | null> {
+    this.tripFrame = null;
+
+    await this.readCycle(TRIP_GROUP).catch(() => {});
+
+    return this.tripFrame === null ? null : decodeTripMeter(this.tripFrame);
   }
 }

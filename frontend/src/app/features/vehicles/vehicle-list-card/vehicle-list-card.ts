@@ -15,10 +15,11 @@ import { DriveService } from '@features/obd/drive-service';
 import { AuthService } from '@core/auth-service';
 import { VehicleService } from '../vehicle-service';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-vehicle-list-card',
-  imports: [MatMenuModule, MatButtonModule, MatIconModule, DatePipe],
+  imports: [MatMenuModule, MatButtonModule, MatIconModule, DatePipe, RouterLink],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './vehicle-list-card.html',
   styleUrl: './vehicle-list-card.css',

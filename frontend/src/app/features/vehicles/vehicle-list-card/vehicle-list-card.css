@@ -118,15 +118,6 @@
   gap: 6px;
 }
 
-.open-vehicle-btn {
-  display: flex;
-  align-items: center;
-  border: none;
-  background: none;
-  color: var(--color-text);
-  cursor: pointer;
-}
-
 .footer-right-options {
   display: flex;
   gap: 1rem;

@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-@Table(name = "vehicles", uniqueConstraints = @UniqueConstraint(columnNames = {"vin", "uid"}))
+@Table(name = "vehicles", uniqueConstraints = @UniqueConstraint(columnNames = { "vin", "uid" }))
 public class Vehicle {
 
     @Id
@@ -28,6 +28,7 @@ public class Vehicle {
     private int engineHP;
     private int mileage;
     private String licensePlate;
+    private Integer lastTripMeter;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")

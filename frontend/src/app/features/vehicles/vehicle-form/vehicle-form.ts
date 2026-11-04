@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -29,6 +29,9 @@ export class VehicleForm {
   private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private location = inject(Location);
+  private route = inject(ActivatedRoute);
+
+  readonly editVid = Number(this.route.snapshot.paramMap.get('vid')) || null;
 
   minYear = 1996;
   maxYear = new Date().getFullYear() + 1;
@@ -52,6 +55,20 @@ export class VehicleForm {
     mileage: 0,
     licensePlate: '',
   };
+
+  ngOnInit(): void {
+    if (this.editVid === null) return;
+
+    this.vehicleService.getVehicle(this.editVid).subscribe({
+      next: (vehicle) => {
+        this.newVehicle = vehicle;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.toastr.error('Could not load vehicle.', 'Vehicle');
+      },
+    });
+  }
 
   private resetForm(): void {
     this.newVehicle = {
@@ -176,6 +193,19 @@ export class VehicleForm {
   }
 
   saveVehicle(): void {
+    if (this.editVid !== null) {
+      this.vehicleService.updateVehicle(this.newVehicle).subscribe({
+        next: () => {
+          this.toastr.success('Vehicle has been updated.', 'Vehicle');
+          this.router.navigate(['/vehicles']);
+        },
+        error: () => {
+          this.toastr.error('Something went wrong. Could not update vehicle.', 'Vehicle');
+        },
+      });
+      return;
+    }
+
     this.vehicleService.saveVehicle(this.newVehicle).subscribe({
       next: () => {
         this.toastr.success('Vehicle has been saved.', 'Vehicle');

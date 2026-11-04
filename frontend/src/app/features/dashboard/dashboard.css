@@ -1,20 +1,27 @@
 .dashboard {
-    margin: 1rem;
-    display: grid;
-    grid-template-columns: minmax(240px, 20%) minmax(0, 1fr);
-    gap: 1rem;
+  margin: 1rem;
+  display: grid;
+  grid-template-columns: minmax(240px, 20%) minmax(0, 1fr);
+  gap: 1rem;
 }
 
 .dashboard > * {
   display: block;
 }
 
-app-vehicle-data {
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
+app-vehicle-data,
+app-vehicle-samples-chart {
   grid-column: 1 / -1;
 }
 
-.greeting { 
-    margin: 1rem;
+.greeting {
+  margin: 1rem;
 }
 
 @media (max-width: 543px) {

@@ -61,3 +61,12 @@ export function decodeCanSignal(signal: CanSignal, hex: string): number | null {
   }
   return raw * signal.scale + signal.offset;
 }
+
+export function decodeTripMeter(hex: string): number | null {
+  const b2 = parseInt(hex.slice(4, 6), 16);
+  const b3 = parseInt(hex.slice(6, 8), 16);
+  const b4 = parseInt(hex.slice(8, 10), 16);
+
+  if (Number.isNaN(b2) || Number.isNaN(b3) || Number.isNaN(b4)) return null;
+  return b3 * 256 + b2 - b4;
+}

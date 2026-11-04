@@ -14,13 +14,52 @@
     margin-left: auto;
 }
 
+.car-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
 .car-container {
+    flex: 999 1 20rem;
+    min-width: 0;
     display: flex;
     align-items: center;
     padding: 1rem;
     gap: 1rem;
     border-radius: var(--radius-md);
     background-color: var(--color-bg-secondary);
+}
+
+.car-photo {
+    flex: 1 1 14rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    padding: 0;
+    overflow: hidden;
+    color: var(--color-text-secondary);
+    border: 1px dashed var(--color-surface);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg);
+    cursor: pointer;
+}
+
+.car-photo:hover {
+    border-color: var(--color-accent);
+}
+
+.car-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .car-body {

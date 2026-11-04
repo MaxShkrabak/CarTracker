@@ -1,6 +1,6 @@
 <div class="vehicle-form">
-  <a (click)="goBack()" class="btn-secondary">◀ Back</a>
-  <h1>Add Vehicle</h1>
+  <a (click)="goBack()" class="btn-secondary">◀ Back to Dashboard</a>
+  <h1>{{ editVid === null ? 'Add Vehicle' : 'Edit Vehicle' }}</h1>
   <p>Enter your vehicle details to start tracking and monitoring.</p>
 
   <div class="form-container">
@@ -84,7 +84,7 @@
       <!-- Color -->
       <mat-form-field>
         <mat-label>Color</mat-label>
-        <input matInput name="color" pattern="[^0-9]*" />
+        <input matInput name="color" [(ngModel)]="newVehicle.color" pattern="[^0-9]*" />
       </mat-form-field>
 
       <!-- License Plate -->

@@ -30,6 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
   },
   {
+    path: 'vehicles/:vid/edit',
+    loadComponent: () => import('./features/vehicles/vehicle-form/vehicle-form').then(m => m.VehicleForm),
+  },
+  {
     path: '**',
     loadComponent: () => import('./shared/not-found/not-found').then(m => m.NotFound),
   }
