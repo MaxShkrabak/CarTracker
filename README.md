@@ -4,8 +4,7 @@ A web app that reads live data from your car over Bluetooth and saves your drive
 
 Plug an OBD-II Bluetooth adapter into your car, open CarTracker in Chrome, and you get live gauges for speed, RPM, coolant temperature, steering angle and each wheel's speed. Every drive is recorded, so you can look back at charts, mileage and your vehicle's top stats.
 
-<!--  Video here -->
-https://github.com/user-attachments/assets/
+https://github.com/user-attachments/assets/8f75da4b-da06-4949-9fa5-9b3351d03122
 
 ---
 
